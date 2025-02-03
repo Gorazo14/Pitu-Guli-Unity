@@ -14,6 +14,7 @@ namespace GDL
         private float pathUpdateDeadline;
         private float shootingDistance;
 
+
         private void Awake()
         {
             enemyReferences = GetComponent<EnemyReferences>();
