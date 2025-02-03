@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 38383f189469675478e4d3ea5303f9a0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -7.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 38383f189469675478e4d3ea5303f9a0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.365
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 38383f189469675478e4d3ea5303f9a0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 6.07
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 38383f189469675478e4d3ea5303f9a0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -62,6 +62,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 38383f189469675478e4d3ea5303f9a0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5097168277725887069}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 38383f189469675478e4d3ea5303f9a0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4402564562491099573}
   m_SourcePrefab: {fileID: 100100000, guid: 38383f189469675478e4d3ea5303f9a0, type: 3}
 --- !u!1 &3037861172466630514 stripped
 GameObject:
@@ -80,8 +83,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2930203985
-  InScenePlacedSourceGlobalObjectIdHash: 0
+  GlobalObjectIdHash: 2022226611
+  InScenePlacedSourceGlobalObjectIdHash: 2160877900
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -101,4 +104,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f71028442ccd22d42a846fc96adfa442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PickUpText: {fileID: 103259318260341977, guid: aff14b1e85590214694c91243bf084a0, type: 3}
+  PickUpText: {fileID: 0}
+--- !u!65 &4402564562491099573
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3037861172466630514}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 5, z: 5}
+  m_Center: {x: 0, y: 0, z: 0}
