@@ -15,6 +15,8 @@ public class TestRelay : MonoBehaviour
 {
     [SerializeField] private Text userCode;
     [SerializeField] private Transform gameInputPrefab;
+    [SerializeField] private Transform medkitPrefab;
+    [SerializeField] private Transform spawnPoint;
 
     private async void Start()
     {

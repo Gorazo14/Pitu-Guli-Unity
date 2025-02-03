@@ -23,10 +23,12 @@ public class PlayerMovment : NetworkBehaviour
     Vector3 velocity;
     [HideInInspector] public float x;
     [HideInInspector] public float z;
-    [HideInInspector] public bool isGrounded;
+    [HideInInspector] public bool isJumping;
 
     [HideInInspector] public bool isRunning;
+    private bool isGrounded;
 
+    
     private void Awake()
     {
         gameInputPrefab = networkPrefabsList.PrefabList[0];
@@ -37,7 +39,7 @@ public class PlayerMovment : NetworkBehaviour
         gameInputPrefab = networkPrefabsList.PrefabList[0];
         gameInput = Instantiate(gameInputPrefab.Prefab).GetComponent<GameInput>();
     }
-
+    
     
 
     // Update is called once per frame
@@ -87,6 +89,16 @@ public class PlayerMovment : NetworkBehaviour
     }
     private void GameInput_OnJump(object sender, System.EventArgs e)
     {
-        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+        if (isGrounded)
+        {
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            isJumping = true;
+            Invoke("SetIsJumpingFalse", 1f);
+        }
     }
+    private void SetIsJumpingFalse()
+    {
+        isJumping = false;
+    }
+
 }

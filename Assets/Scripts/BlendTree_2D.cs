@@ -17,7 +17,7 @@ public class BlendTree_2D : NetworkBehaviour
     [SerializeField] private PlayerMovment playerMovement;
     [SerializeField] private GameObject gun;
 
-
+    
     private void Awake()
     {
         gameInputPrefab = networkPrefabsList.PrefabList[0];
@@ -28,6 +28,7 @@ public class BlendTree_2D : NetworkBehaviour
         gun.SetActive(false);
         animator = GetComponent<Animator>();
     }
+    
     private void Update()
     {
         if (!IsOwner) return;
@@ -42,7 +43,7 @@ public class BlendTree_2D : NetworkBehaviour
             velocityZ = playerMovement.z;
             velocityX = playerMovement.x;
         }
-        if (!playerMovement.isGrounded)
+        if (playerMovement.isJumping)
         {
             animator.SetBool("isJumping", true);
         }else

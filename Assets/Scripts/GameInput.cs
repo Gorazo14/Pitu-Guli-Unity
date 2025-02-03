@@ -21,13 +21,12 @@ public class GameInput : NetworkBehaviour
         playerInputActions = new PlayerInputActions();
         playerInputActions.Enable();
 
-        playerInputActions.Player.Jump.started += Jump_performed;
+        playerInputActions.Player.Jump.performed += Jump_performed;
         playerInputActions.Player.Run.performed += Run_performed;
         playerInputActions.Player.Run.canceled += Run_canceled;
         playerInputActions.Gun.Equip.performed += Equip_performed;
         playerInputActions.Gun.Unequip.performed += Unequip_performed;
     }
-
     private void Unequip_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         OnUnequip?.Invoke(this, EventArgs.Empty);
@@ -37,17 +36,6 @@ public class GameInput : NetworkBehaviour
     {
         OnEquip?.Invoke(this, EventArgs.Empty);
     }
-
-    private void Aim_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        OnAimExit?.Invoke(this, EventArgs.Empty);
-    }
-
-    private void Aim_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        OnAim?.Invoke(this, EventArgs.Empty);
-    }
-
     private void Run_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         OnRunExit?.Invoke(this, EventArgs.Empty);
