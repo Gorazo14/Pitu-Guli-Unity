@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 public class BlendTree_2D : NetworkBehaviour
 {
@@ -14,8 +16,18 @@ public class BlendTree_2D : NetworkBehaviour
     private float velocityX = 0.0f;
     private float velocityZ = 0.0f;
 
+    private float aimLayerWeight;
+
     [SerializeField] private PlayerMovment playerMovement;
     [SerializeField] private GameObject gun;
+
+    [SerializeField] private Transform rightHandIK;
+    [SerializeField] private Transform leftHandIK;
+    [SerializeField] private Transform rightHandPos;
+    [SerializeField] private Transform leftHandPos;
+
+    [SerializeField] private TwoBoneIKConstraint rightIKConstraint;
+    [SerializeField] private TwoBoneIKConstraint leftIKConstraint;
 
     
     private void Awake()
@@ -27,6 +39,9 @@ public class BlendTree_2D : NetworkBehaviour
     {
         gun.SetActive(false);
         animator = GetComponent<Animator>();
+
+        rightIKConstraint.weight = 0f;
+        leftIKConstraint.weight = 0f;
     }
     
     private void Update()
@@ -54,6 +69,12 @@ public class BlendTree_2D : NetworkBehaviour
         gameInput.OnEquip += GameInput_OnEquip;
         gameInput.OnUnequip += GameInput_OnUnequip;
 
+        rightHandIK.position = rightHandPos.position;
+        rightHandIK.rotation = rightHandPos.rotation;
+
+        leftHandIK.position = leftHandPos.position;
+        leftHandIK.rotation = leftHandPos.rotation;
+
         animator.SetFloat("Velocity Z", velocityZ);
         animator.SetFloat("Velocity X", velocityX);
     }
@@ -61,11 +82,15 @@ public class BlendTree_2D : NetworkBehaviour
     private void GameInput_OnUnequip(object sender, System.EventArgs e)
     {
         gun.SetActive(false);
+        rightIKConstraint.weight = 0f;
+        leftIKConstraint.weight = 0f;
     }
 
     private void GameInput_OnEquip(object sender, System.EventArgs e)
     {
         gun.SetActive(true);
+        rightIKConstraint.weight = 1f;
+        leftIKConstraint.weight = 1f;
     }
 
    
