@@ -13,10 +13,15 @@ using UnityEngine.UI;
 
 public class TestRelay : MonoBehaviour
 {
-    [SerializeField] private Text userCode;
-    [SerializeField] private Transform gameInputPrefab;
 
-    private async void Start()
+    [SerializeField] private Text userCode;
+    [SerializeField] private NetworkPrefabsList networkPrefabsList;
+
+    private NetworkPrefab gameInputPrefab;
+    [SerializeField] private GameInput gameInput;
+
+
+    private async void Awake()
     {
         await UnityServices.InitializeAsync();
         AuthenticationService.Instance.SignedIn += () =>
@@ -27,8 +32,12 @@ public class TestRelay : MonoBehaviour
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
         CreateRelay();
-        Transform gameInputTransform = Instantiate(gameInputPrefab);
-        gameInputTransform.GetComponent<NetworkObject>().Spawn(true);
+
+        gameInputPrefab = networkPrefabsList.PrefabList[1];
+        GameObject gameInputGameObject = Instantiate(gameInputPrefab.Prefab);
+        gameInputGameObject.GetComponent<NetworkObject>().Spawn(true);
+        gameInput = gameInputGameObject.GetComponent<GameInput>();
+
     }
 
     private void Update()
@@ -74,5 +83,9 @@ public class TestRelay : MonoBehaviour
         {
             Debug.Log(e);
         }
+    }
+    public GameInput GetGameInput()
+    {
+        return gameInput;
     }
 }

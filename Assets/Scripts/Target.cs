@@ -4,9 +4,9 @@ public class Target : MonoBehaviour {
 
     public float health = 200f;
 
-    public void TakeDamage(float amaount) 
+    public void TakeDamage(float ammount) 
     {
-        health -= amaount;
+        health -= ammount;
         if (health <= 0f)
         {
             Die();

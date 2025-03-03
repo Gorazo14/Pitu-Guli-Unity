@@ -4,13 +4,11 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-public class GameInput : NetworkBehaviour
+public class GameInput : MonoBehaviour
 {
     public event EventHandler OnJump;
     public event EventHandler OnRun;
     public event EventHandler OnRunExit;
-    public event EventHandler OnAim;
-    public event EventHandler OnAimExit;
     public event EventHandler OnEquip;
     public event EventHandler OnUnequip;
 
@@ -49,12 +47,5 @@ public class GameInput : NetworkBehaviour
     private void Jump_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         OnJump?.Invoke(this, EventArgs.Empty);
-    }
-
-    public Vector2 GetInputVector()
-    {
-        Vector2 inputVector = playerInputActions.Player.Movement.ReadValue<Vector2>();
-
-        return inputVector;
     }
 }

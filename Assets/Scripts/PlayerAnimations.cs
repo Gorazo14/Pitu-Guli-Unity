@@ -5,27 +5,24 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
-public class BlendTree_2D : NetworkBehaviour
+public class PlayerAnimations : MonoBehaviour
 {
-    [SerializeField] private NetworkPrefabsList networkPrefabsList;
-    private NetworkPrefab gameInputPrefab;
-    private GameInput gameInput;
-
+    [SerializeField] private GameInput gameInput;
     private Animator animator;
 
     private float velocityX = 0.0f;
     private float velocityZ = 0.0f;
 
-    [SerializeField] private PlayerMovment playerMovement;
+    [SerializeField] private Player player;
     [SerializeField] private GameObject gun;
     [SerializeField] private Rig handsRig;
+    [SerializeField] private Rig chainRig;
 
     
     private void Awake()
     {
-        gameInputPrefab = networkPrefabsList.PrefabList[0];
-        gameInput = Instantiate(gameInputPrefab.Prefab).GetComponent<GameInput>();
         handsRig.weight = 0f;
+        chainRig.weight = 0f;   
     }
     private void Start()
     {
@@ -35,19 +32,17 @@ public class BlendTree_2D : NetworkBehaviour
     
     private void Update()
     {
-        if (!IsOwner) return;
-
         float multiplier = 4f;
-        if (playerMovement.isRunning)
+        if (player.isRunning)
         {
-            velocityZ = playerMovement.z * multiplier;
-            velocityX = playerMovement.x * multiplier;
+            velocityZ = player.z * multiplier;
+            velocityX = player.x * multiplier;
         }else
         {
-            velocityZ = playerMovement.z;
-            velocityX = playerMovement.x;
+            velocityZ = player.z;
+            velocityX = player.x;
         }
-        if (playerMovement.isJumping)
+        if (player.isJumping)
         {
             animator.SetBool("isJumping", true);
         }else
@@ -66,12 +61,14 @@ public class BlendTree_2D : NetworkBehaviour
     {
         gun.SetActive(false);
         handsRig.weight = 0f;
+        chainRig.weight = 0f;
     }
 
     private void GameInput_OnEquip(object sender, System.EventArgs e)
     {
         gun.SetActive(true);
         handsRig.weight = 1f;
+        chainRig.weight = 1f;
     }
 
    

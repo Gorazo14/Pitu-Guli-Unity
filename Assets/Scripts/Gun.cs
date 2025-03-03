@@ -3,12 +3,10 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-    public float damage = 10f;
-    public float range = 100f;
-    public float fireRate = 15f;
-    public float impactForce = 30f;
-
-    public Camera fpsCam;
+    [SerializeField] private float damage = 10f;
+    [SerializeField] private float range = 100f;
+    [SerializeField] private float fireRate = 10000f;
+    [SerializeField] private Transform gunTip;
 
 
     private float nextTimeToFire = 0f;
@@ -28,7 +26,7 @@ public class Gun : MonoBehaviour
     void Shoot()
     {
         RaycastHit hit;
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hit, range))
+        if (Physics.Raycast(gunTip.position, gunTip.forward, out hit, range))
         {
             Debug.Log(hit.transform.name);
 
@@ -37,11 +35,6 @@ public class Gun : MonoBehaviour
             {
                 target.TakeDamage(damage);
                 Debug.Log(target.health);
-            }
-
-            if (hit.rigidbody != null)
-            {
-                hit.rigidbody.AddForce(-hit.normal * impactForce);
             }
         }
     }
