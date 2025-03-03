@@ -25,16 +25,14 @@ public class TestRelay : MonoBehaviour
         };
 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
+
+        CreateRelay();
+        Transform gameInputTransform = Instantiate(gameInputPrefab);
+        gameInputTransform.GetComponent<NetworkObject>().Spawn(true);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.RightControl))
-        {
-            CreateRelay();
-            Transform gameInputTransform = Instantiate(gameInputPrefab);
-            gameInputTransform.GetComponent<NetworkObject>().Spawn(true);
-        }
         if (Input.GetKeyDown(KeyCode.Return))
         {
             JoinRelay(userCode.text);

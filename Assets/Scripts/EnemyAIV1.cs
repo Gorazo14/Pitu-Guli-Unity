@@ -18,7 +18,7 @@ namespace GDL
         private void Awake()
         {
             enemyReferences = GetComponent<EnemyReferences>();
-  
+
         }
 
         void Start()
@@ -54,7 +54,7 @@ namespace GDL
         }
         private void UpdatePath()
         {
-            if(Time.time >= pathUpdateDeadline)
+            if (Time.time >= pathUpdateDeadline)
             {
                 Debug.Log("Updating Path");
                 pathUpdateDeadline = Time.time + enemyReferences.pathUpdatedelay;
