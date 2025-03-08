@@ -11,6 +11,7 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnRunExit;
     public event EventHandler OnEquip;
     public event EventHandler OnUnequip;
+    public event EventHandler OnPickUp;
 
     private PlayerInputActions playerInputActions;
 
@@ -24,7 +25,14 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Run.canceled += Run_canceled;
         playerInputActions.Gun.Equip.performed += Equip_performed;
         playerInputActions.Gun.Unequip.performed += Unequip_performed;
+        playerInputActions.Player.PickUp.performed += PickUp_performed;
     }
+
+    private void PickUp_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnPickUp?.Invoke(this, EventArgs.Empty);
+    }
+
     private void Unequip_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         OnUnequip?.Invoke(this, EventArgs.Empty);

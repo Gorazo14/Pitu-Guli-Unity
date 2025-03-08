@@ -1,21 +1,25 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Netcode;
 using UnityEngine;
 
 public class Player : MonoBehaviour
-{
+{   
+    public static event EventHandler OnItemPickedUp;
+
     [SerializeField] private GameInput gameInput;
     [SerializeField] private CharacterController controller;
 
     [SerializeField] private float walkSpeed = 2f;
     [SerializeField] private float runSpeed = 4f;
 
-    public float speed;
-    public float gravity = -9.81f;
-    public float jumpHeight = 3f;
-    public float sphereRadius = 0.4f;
-    public LayerMask groundMask; 
+    [SerializeField] private float speed;
+    [SerializeField] private float gravity = -9.81f;
+    [SerializeField] private float jumpHeight = 3f;
+    [SerializeField] private float sphereRadius = 0.4f;
+    [SerializeField] private LayerMask groundMask; 
 
     private Vector3 velocity;
     [HideInInspector] public float x;
@@ -24,13 +28,19 @@ public class Player : MonoBehaviour
     [HideInInspector] public bool isRunning;
 
     private bool isGrounded;
-    
+    private PickUp pickUp;
    
     private void Start()
     {
         gameInput.OnRun += GameInput_OnRun;
         gameInput.OnRunExit += GameInput_OnRunExit;
         gameInput.OnJump += GameInput_OnJump;
+        gameInput.OnPickUp += GameInput_OnPickUp;
+    }
+
+    private void GameInput_OnPickUp(object sender, System.EventArgs e)
+    {
+        OnItemPickedUp?.Invoke(this, EventArgs.Empty);
     }
 
     // Update is called once per frame
@@ -88,6 +98,11 @@ public class Player : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    public void SetPickUp(PickUp pickUp)
+    {
+        this.pickUp = pickUp;
     }
 
 }
