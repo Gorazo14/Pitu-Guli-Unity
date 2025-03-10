@@ -32,6 +32,11 @@ public class PlayerAnimations : MonoBehaviour
     
     private void Update()
     {
+        if (player.enabled == false)
+        {
+            return;
+        }
+
         float multiplier = 4f;
         if (player.isRunning)
         {

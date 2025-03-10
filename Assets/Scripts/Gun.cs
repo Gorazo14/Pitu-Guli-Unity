@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    [SerializeField] private Player player;
     [SerializeField] private float damage = 10f;
     [SerializeField] private float range = 100f;
     [SerializeField] private float fireRate = 10000f;
@@ -14,7 +15,11 @@ public class Gun : MonoBehaviour
         
   // Update is called once per frame
   void Update() {
-  
+        
+        if (player.enabled == false)
+        {
+            return;
+        }
         if (Input.GetMouseButtonDown(0) && Time.time >= nextTimeToFire )
         {
             nextTimeToFire = Time.time +1f / fireRate;   

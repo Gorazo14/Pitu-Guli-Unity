@@ -12,6 +12,7 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnEquip;
     public event EventHandler OnUnequip;
     public event EventHandler OnPickUp;
+    public event EventHandler OnInventoryOpenClose;
 
     private PlayerInputActions playerInputActions;
 
@@ -26,6 +27,12 @@ public class GameInput : MonoBehaviour
         playerInputActions.Gun.Equip.performed += Equip_performed;
         playerInputActions.Gun.Unequip.performed += Unequip_performed;
         playerInputActions.Player.PickUp.performed += PickUp_performed;
+        playerInputActions.Player.Inventory.performed += Inventory_performed;
+    }
+
+    private void Inventory_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnInventoryOpenClose?.Invoke(this, EventArgs.Empty);
     }
 
     private void PickUp_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

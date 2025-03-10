@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {   
-    public static event EventHandler OnItemPickedUp;
+    public event EventHandler OnItemPickedUp;
 
     [SerializeField] private GameInput gameInput;
     [SerializeField] private CharacterController controller;
@@ -28,25 +28,42 @@ public class Player : MonoBehaviour
     [HideInInspector] public bool isRunning;
 
     private bool isGrounded;
-    private PickUp pickUp;
-   
+
+    [SerializeField] private GameObject pickUpText;
+    [SerializeField] private float pickupDistance;
+    [SerializeField] private LayerMask pickupableLayer;
+    [SerializeField] private GameObject[] items;
+
+    private bool isPickupableInWay;
+    private RaycastHit hitInfo;
+
+
     private void Start()
     {
         gameInput.OnRun += GameInput_OnRun;
         gameInput.OnRunExit += GameInput_OnRunExit;
         gameInput.OnJump += GameInput_OnJump;
         gameInput.OnPickUp += GameInput_OnPickUp;
-    }
 
+        pickUpText.SetActive(false);
+        isPickupableInWay = false;
+    }
     private void GameInput_OnPickUp(object sender, System.EventArgs e)
     {
-        OnItemPickedUp?.Invoke(this, EventArgs.Empty);
+        if (isPickupableInWay)
+        {
+            pickUpText.SetActive(false);
+            hitInfo.transform.gameObject.SetActive(false);
+
+            OnItemPickedUp?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         HandleMovement();
+        HandlePickup();
     }
 
     private void GameInput_OnRun(object sender, System.EventArgs e)
@@ -99,10 +116,18 @@ public class Player : MonoBehaviour
 
         controller.Move(velocity * Time.deltaTime);
     }
-
-    public void SetPickUp(PickUp pickUp)
+    private void HandlePickup()
     {
-        this.pickUp = pickUp;
+        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, pickupDistance, pickupableLayer))
+        {
+            pickUpText.SetActive(true);
+            isPickupableInWay = true;
+        }
+        else
+        {
+            pickUpText.SetActive(false);
+            isPickupableInWay = false;
+        }
     }
 
 }
