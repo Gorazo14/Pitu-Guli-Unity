@@ -32,11 +32,9 @@ public class Player : MonoBehaviour
     [SerializeField] private GameObject pickUpText;
     [SerializeField] private float pickupDistance;
     [SerializeField] private LayerMask pickupableLayer;
-    [SerializeField] private GameObject[] items;
 
     private bool isPickupableInWay;
     private RaycastHit hitInfo;
-
 
     private void Start()
     {
@@ -118,7 +116,8 @@ public class Player : MonoBehaviour
     }
     private void HandlePickup()
     {
-        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, pickupDistance, pickupableLayer))
+        float addHeight = 0.2f;
+        if (Physics.Raycast(transform.position + new Vector3(0f, addHeight, 0f), transform.forward, out hitInfo, pickupDistance, pickupableLayer))
         {
             pickUpText.SetActive(true);
             isPickupableInWay = true;

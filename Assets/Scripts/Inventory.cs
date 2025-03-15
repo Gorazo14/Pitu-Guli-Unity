@@ -12,6 +12,9 @@ public class Inventory : MonoBehaviour, IDropHandler
     [SerializeField] private GameObject[] items;
     [SerializeField] private Transform itemSpawnPoint;
 
+    [SerializeField] private MouseLook mouseLook;
+    [SerializeField] private Gun gun;
+
     private void Start()
     {
         inventoryBackground.SetActive(false);
@@ -38,12 +41,14 @@ public class Inventory : MonoBehaviour, IDropHandler
         {
             inventoryBackground.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
-            player.enabled = true;
+            mouseLook.enabled = true;
+            gun.enabled = true;
         }else
         {
             inventoryBackground.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
-            player.enabled = false;
+            mouseLook.enabled = false;
+            gun.enabled = false;
         }
     }
 
