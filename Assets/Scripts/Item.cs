@@ -1,19 +1,22 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IInitializePotentialDragHandler
+public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IInitializePotentialDragHandler
 {
     [SerializeField] private Canvas canvas;
-    [SerializeField] private RectTransform parentItemSlot;
+    private RectTransform parentItemSlot;
 
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
 
     private void Start()
     {
+        parentItemSlot = null;
+
         canvasGroup = GetComponent<CanvasGroup>();
         rectTransform = GetComponent<RectTransform>();
     }
@@ -21,6 +24,8 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     {
         canvasGroup.alpha = 0.7f;
         canvasGroup.blocksRaycasts = false;
+
+        eventData.pointerDrag.GetComponent<Item>().ClearParentItemSlot();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -38,13 +43,27 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
     {
         eventData.useDragThreshold = false;
     }
-    public RectTransform GetRectTransform()
-    {
-        return parentItemSlot;
-    }
-
     public CanvasGroup GetCanvasGroup()
     {
         return canvasGroup;
+    }
+
+    public void SetParentItemSlot (RectTransform itemSlot)
+    {
+        parentItemSlot = itemSlot;
+
+        rectTransform.anchoredPosition = itemSlot.anchoredPosition;
+    }
+    public RectTransform GetParentItemSlot()
+    {
+        return parentItemSlot;
+    }
+    public void ClearParentItemSlot()
+    {
+        parentItemSlot = null;
+    }
+    public bool HasParentItemSlot ()
+    {
+        return parentItemSlot != null;
     }
 }

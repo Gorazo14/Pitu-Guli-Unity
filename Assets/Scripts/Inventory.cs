@@ -9,8 +9,13 @@ public class Inventory : MonoBehaviour, IDropHandler
     [SerializeField] private GameObject inventoryBackground;
     [SerializeField] private Player player;
     [SerializeField] private GameObject medkitPrefab;
-    [SerializeField] private GameObject[] items;
     [SerializeField] private Transform itemSpawnPoint;
+
+    [SerializeField] private MouseLook mouseLook;
+    [SerializeField] private Gun gun;
+
+    [SerializeField] private Item[] items;
+    [SerializeField] private ItemSlot[] itemSlots;
 
     private void Start()
     {
@@ -22,11 +27,22 @@ public class Inventory : MonoBehaviour, IDropHandler
 
     private void Player_OnItemPickedUp(object sender, System.EventArgs e)
     {
-        foreach(GameObject item in items)
+        foreach (ItemSlot itemSlot in itemSlots)
         {
-            if (!item.activeSelf)
+            if (!itemSlot.HasItem())
             {
-                item.SetActive(true);
+                foreach (Item item in items)
+                {
+                    if (!item.HasParentItemSlot())
+                    {
+                        item.gameObject.SetActive(true);
+
+                        itemSlot.SetItem(item.GetComponent<RectTransform>());
+                        item.SetParentItemSlot(itemSlot.GetComponent<RectTransform>());
+
+                        break;
+                    }
+                }
                 break;
             }
         }
@@ -38,12 +54,14 @@ public class Inventory : MonoBehaviour, IDropHandler
         {
             inventoryBackground.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
-            player.enabled = true;
+            mouseLook.enabled = true;
+            gun.enabled = true;
         }else
         {
             inventoryBackground.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
-            player.enabled = false;
+            mouseLook.enabled = false;
+            gun.enabled = false;
         }
     }
 
@@ -52,8 +70,8 @@ public class Inventory : MonoBehaviour, IDropHandler
         Instantiate(medkitPrefab, itemSpawnPoint.position, itemSpawnPoint.rotation);
         eventData.pointerDrag.gameObject.SetActive(false);
 
-        eventData.pointerDrag.gameObject.GetComponent<DragDrop>().GetCanvasGroup().alpha = 1f;
-        eventData.pointerDrag.gameObject.GetComponent<DragDrop>().GetCanvasGroup().blocksRaycasts = true;
-        eventData.pointerDrag.gameObject.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.gameObject.GetComponent<DragDrop>().GetRectTransform().anchoredPosition;
+        eventData.pointerDrag.gameObject.GetComponent<Item>().GetCanvasGroup().alpha = 1f;
+        eventData.pointerDrag.gameObject.GetComponent<Item>().GetCanvasGroup().blocksRaycasts = true;
+        eventData.pointerDrag.gameObject.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.gameObject.GetComponent<Item>().GetParentItemSlot().anchoredPosition;
     }
 }
