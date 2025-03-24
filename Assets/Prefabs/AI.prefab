@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2654598558912473660}
   - component: {fileID: 7017088175546685370}
   - component: {fileID: 7060706158677508318}
+  - component: {fileID: 2068076288084226798}
   - component: {fileID: 9172569799705246710}
   - component: {fileID: 7549878705139992408}
   - component: {fileID: 5643590657857075834}
@@ -114,7 +115,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0.03, z: 0}
---- !u!114 &9172569799705246710
+--- !u!114 &2068076288084226798
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -123,11 +124,33 @@ MonoBehaviour:
   m_GameObject: {fileID: 1781313327977288287}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13759184fdb156744be5c538be282b29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyShooter: {fileID: 5643590657857075834}
+  obstacleLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  visionCheckInterval: 0.2
+--- !u!114 &9172569799705246710
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1781313327977288287}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fa904734cd1b93149a94aae1cd426f3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 6694405375355841042, guid: c1b2f400674661949a1a1c094f9b9549, type: 3}
   enemyShooter: {fileID: 5643590657857075834}
+  viewDistance: 20
+  viewAngle: 90
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!114 &7549878705139992408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,8 +183,21 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  playerTransform: {fileID: 0}
   spread: {x: 0.06, y: 0.06, z: 0.06}
-  bulletTrail: {fileID: 0}
+  bulletSpeed: 100
+  bulletPrefab: {fileID: 2210221331882293745, guid: 13ece5b4d2c7f424b8c7296d536c378e, type: 3}
+  muzzleFlash: {fileID: 0}
+  initialTargetingTime: 1
+  aimThreshold: 5
+  targetingSpeed: 8
+  detectionRange: 15
+  viewAngle: 60
+  shotsBeforeReload: 5
+  reloadTime: 3
+  fireRate: 1
+  shootSound: {fileID: 8300000, guid: eb440addded785e4c8a1336df1c78860, type: 3}
+  reloadSound: {fileID: 0}
 --- !u!195 &4550882217628923640
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -172,11 +208,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.66
-  m_Speed: 7
+  m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 200
-  m_StoppingDistance: 7
+  m_StoppingDistance: 10
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
