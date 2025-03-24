@@ -9,8 +9,7 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnJump;
     public event EventHandler OnRun;
     public event EventHandler OnRunExit;
-    public event EventHandler OnEquip;
-    public event EventHandler OnUnequip;
+    public event EventHandler OnGunEquip;
     public event EventHandler OnPickUp;
     public event EventHandler OnInventoryOpenClose;
 
@@ -24,10 +23,14 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Jump.performed += Jump_performed;
         playerInputActions.Player.Run.performed += Run_performed;
         playerInputActions.Player.Run.canceled += Run_canceled;
-        playerInputActions.Gun.Equip.performed += Equip_performed;
-        playerInputActions.Gun.Unequip.performed += Unequip_performed;
+        playerInputActions.Gun.EquipGun.performed += EquipGun_performed;
         playerInputActions.Player.PickUp.performed += PickUp_performed;
         playerInputActions.Player.Inventory.performed += Inventory_performed;
+    }
+
+    private void EquipGun_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnGunEquip?.Invoke(this, EventArgs.Empty);
     }
 
     private void Inventory_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
@@ -38,16 +41,6 @@ public class GameInput : MonoBehaviour
     private void PickUp_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {
         OnPickUp?.Invoke(this, EventArgs.Empty);
-    }
-
-    private void Unequip_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        OnUnequip?.Invoke(this, EventArgs.Empty);
-    }
-
-    private void Equip_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
-    {
-        OnEquip?.Invoke(this, EventArgs.Empty);
     }
     private void Run_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
     {

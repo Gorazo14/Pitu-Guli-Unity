@@ -5,37 +5,50 @@ using UnityEngine.EventSystems;
 
 public class ItemSlot : MonoBehaviour, IDropHandler
 {
-    private RectTransform item;
-    private RectTransform itemSlotRectTransform;
+    [SerializeField] private RectTransform itemSlotRectTransform;
+
+    private Item item;
 
     private void Start()
     {
-        itemSlotRectTransform = GetComponent<RectTransform>(); 
+        gameObject.SetActive(true);
     }
     public void OnDrop(PointerEventData eventData)
     {
         if (eventData.pointerDrag != null)
         {
-            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+            if (!HasItem())
+            {
+                eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+                eventData.pointerDrag.GetComponent<Item>().SetParentItemSlot(this);
 
-            SetItem(eventData.pointerDrag.GetComponent<RectTransform>());
-            eventData.pointerDrag.GetComponent<Item>().SetParentItemSlot(itemSlotRectTransform);
+                SetItem(eventData.pointerDrag.GetComponent<Item>());
+            }else
+            {
+                eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
+                eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().SetItem(eventData.pointerDrag.GetComponent<Item>());
+            } 
         }
     }
-    public void SetItem (RectTransform rectTransform)
+    public RectTransform GetItemSlotRectTransform()
     {
-        item = rectTransform;
+        return itemSlotRectTransform;
     }
-    public RectTransform GetItem ()
+
+    public void SetItem(Item item)
+    {
+        this.item = item;
+    }
+    public Item GetItem()
     {
         return item;
     }
-    public void ClearItem ()
-    {
-        item = null;
-    }
-    public bool HasItem ()
+    public bool HasItem()
     {
         return item != null;
+    }
+    public void ClearItem()
+    {
+        item = null;
     }
 }

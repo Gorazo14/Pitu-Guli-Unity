@@ -28,8 +28,11 @@ public class PlayerAnimations : MonoBehaviour
     {
         gun.SetActive(false);
         animator = GetComponent<Animator>();
+
+        gameInput.OnGunEquip += GameInput_OnGunEquip;
     }
-    
+
+
     private void Update()
     {
         if (player.enabled == false)
@@ -55,26 +58,22 @@ public class PlayerAnimations : MonoBehaviour
             animator.SetBool("isJumping", false);
         }
 
-        gameInput.OnEquip += GameInput_OnEquip;
-        gameInput.OnUnequip += GameInput_OnUnequip;
-
         animator.SetFloat("Velocity Z", velocityZ);
         animator.SetFloat("Velocity X", velocityX);
     }
-
-    private void GameInput_OnUnequip(object sender, System.EventArgs e)
+    private void GameInput_OnGunEquip(object sender, System.EventArgs e)
     {
-        gun.SetActive(false);
-        handsRig.weight = 0f;
-        chainRig.weight = 0f;
+        if (gun.activeSelf)
+        {
+            gun.SetActive(false);
+            handsRig.weight = 0f;
+            chainRig.weight = 0f;
+        }else
+        {
+            gun.SetActive(true);
+            handsRig.weight = 1f;
+            chainRig.weight = 1f;
+        }
     }
 
-    private void GameInput_OnEquip(object sender, System.EventArgs e)
-    {
-        gun.SetActive(true);
-        handsRig.weight = 1f;
-        chainRig.weight = 1f;
-    }
-
-   
 }

@@ -5,27 +5,27 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 
-public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IInitializePotentialDragHandler
+public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler, IInitializePotentialDragHandler, IDropHandler
 {
     [SerializeField] private Canvas canvas;
-    private RectTransform parentItemSlot;
 
-    private RectTransform rectTransform;
+    [SerializeField] private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
+
+    private ItemSlot itemSlot;
+    private ItemSlot previousItemSlot;
 
     private void Start()
     {
-        parentItemSlot = null;
-
         canvasGroup = GetComponent<CanvasGroup>();
-        rectTransform = GetComponent<RectTransform>();
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
         canvasGroup.alpha = 0.7f;
         canvasGroup.blocksRaycasts = false;
 
-        eventData.pointerDrag.GetComponent<Item>().ClearParentItemSlot();
+        previousItemSlot = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot();
+        eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().ClearItem();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -48,22 +48,26 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
         return canvasGroup;
     }
 
-    public void SetParentItemSlot (RectTransform itemSlot)
+    public void OnDrop(PointerEventData eventData)
     {
-        parentItemSlot = itemSlot;
+        eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
+        eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().SetItem(eventData.pointerDrag.GetComponent<Item>());
+    }
 
-        rectTransform.anchoredPosition = itemSlot.anchoredPosition;
-    }
-    public RectTransform GetParentItemSlot()
+    public void SetParentItemSlot(ItemSlot itemSlot)
     {
-        return parentItemSlot;
+        this.itemSlot = itemSlot;
     }
-    public void ClearParentItemSlot()
+    public ItemSlot GetParentItemSlot()
     {
-        parentItemSlot = null;
+        return itemSlot;
     }
-    public bool HasParentItemSlot ()
+    public ItemSlot GetPreviousParentItemSlot()
     {
-        return parentItemSlot != null;
+        return previousItemSlot;
+    }
+    public RectTransform GetItemRectTransform()
+    {
+        return rectTransform;
     }
 }

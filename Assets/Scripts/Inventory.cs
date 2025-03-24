@@ -14,9 +14,9 @@ public class Inventory : MonoBehaviour, IDropHandler
     [SerializeField] private MouseLook mouseLook;
     [SerializeField] private Gun gun;
 
+    [SerializeField] private ItemSlot[] slots;
     [SerializeField] private Item[] items;
-    [SerializeField] private ItemSlot[] itemSlots;
-
+ 
     private void Start()
     {
         inventoryBackground.SetActive(false);
@@ -24,30 +24,32 @@ public class Inventory : MonoBehaviour, IDropHandler
         gameInput.OnInventoryOpenClose += GameInput_OnInventoryOpenClose;
         player.OnItemPickedUp += Player_OnItemPickedUp;
     }
-
+    
     private void Player_OnItemPickedUp(object sender, System.EventArgs e)
     {
-        foreach (ItemSlot itemSlot in itemSlots)
+        foreach (ItemSlot slot in slots)
         {
-            if (!itemSlot.HasItem())
+            if (!slot.HasItem())
             {
                 foreach (Item item in items)
                 {
-                    if (!item.HasParentItemSlot())
+                    if (!item.gameObject.activeSelf)
                     {
-                        item.gameObject.SetActive(true);
+                        item.SetParentItemSlot(slot);
+                        slot.SetItem(item);
+                        item.GetItemRectTransform().anchoredPosition = slot.GetItemSlotRectTransform().anchoredPosition;
 
-                        itemSlot.SetItem(item.GetComponent<RectTransform>());
-                        item.SetParentItemSlot(itemSlot.GetComponent<RectTransform>());
+                        item.gameObject.SetActive(true);
 
                         break;
                     }
                 }
+
                 break;
             }
         }
     }
-
+    
     private void GameInput_OnInventoryOpenClose(object sender, System.EventArgs e)
     {
         if (inventoryBackground.activeSelf)
@@ -72,6 +74,5 @@ public class Inventory : MonoBehaviour, IDropHandler
 
         eventData.pointerDrag.gameObject.GetComponent<Item>().GetCanvasGroup().alpha = 1f;
         eventData.pointerDrag.gameObject.GetComponent<Item>().GetCanvasGroup().blocksRaycasts = true;
-        eventData.pointerDrag.gameObject.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.gameObject.GetComponent<Item>().GetParentItemSlot().anchoredPosition;
     }
 }

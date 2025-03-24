@@ -180,18 +180,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             ""id"": ""176ec945-9f22-423b-a07e-d26c0a468bec"",
             ""actions"": [
                 {
-                    ""name"": ""Equip"",
+                    ""name"": ""EquipGun"",
                     ""type"": ""Button"",
                     ""id"": ""5fbdf834-f935-4d24-b50f-83e7e864a10f"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
-                    ""name"": ""Unequip"",
-                    ""type"": ""Button"",
-                    ""id"": ""4ee39818-863b-44db-8a09-9f4877fdba93"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -202,22 +193,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""87323e15-7705-450e-8b48-a0eaff93c37a"",
-                    ""path"": ""<Keyboard>/2"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Equip"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8c95583f-9297-49d7-989a-b2facc1850ed"",
                     ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Unequip"",
+                    ""action"": ""EquipGun"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -235,8 +215,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Inventory = m_Player.FindAction("Inventory", throwIfNotFound: true);
         // Gun
         m_Gun = asset.FindActionMap("Gun", throwIfNotFound: true);
-        m_Gun_Equip = m_Gun.FindAction("Equip", throwIfNotFound: true);
-        m_Gun_Unequip = m_Gun.FindAction("Unequip", throwIfNotFound: true);
+        m_Gun_EquipGun = m_Gun.FindAction("EquipGun", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -376,14 +355,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     // Gun
     private readonly InputActionMap m_Gun;
     private List<IGunActions> m_GunActionsCallbackInterfaces = new List<IGunActions>();
-    private readonly InputAction m_Gun_Equip;
-    private readonly InputAction m_Gun_Unequip;
+    private readonly InputAction m_Gun_EquipGun;
     public struct GunActions
     {
         private @PlayerInputActions m_Wrapper;
         public GunActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Equip => m_Wrapper.m_Gun_Equip;
-        public InputAction @Unequip => m_Wrapper.m_Gun_Unequip;
+        public InputAction @EquipGun => m_Wrapper.m_Gun_EquipGun;
         public InputActionMap Get() { return m_Wrapper.m_Gun; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -393,22 +370,16 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_GunActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_GunActionsCallbackInterfaces.Add(instance);
-            @Equip.started += instance.OnEquip;
-            @Equip.performed += instance.OnEquip;
-            @Equip.canceled += instance.OnEquip;
-            @Unequip.started += instance.OnUnequip;
-            @Unequip.performed += instance.OnUnequip;
-            @Unequip.canceled += instance.OnUnequip;
+            @EquipGun.started += instance.OnEquipGun;
+            @EquipGun.performed += instance.OnEquipGun;
+            @EquipGun.canceled += instance.OnEquipGun;
         }
 
         private void UnregisterCallbacks(IGunActions instance)
         {
-            @Equip.started -= instance.OnEquip;
-            @Equip.performed -= instance.OnEquip;
-            @Equip.canceled -= instance.OnEquip;
-            @Unequip.started -= instance.OnUnequip;
-            @Unequip.performed -= instance.OnUnequip;
-            @Unequip.canceled -= instance.OnUnequip;
+            @EquipGun.started -= instance.OnEquipGun;
+            @EquipGun.performed -= instance.OnEquipGun;
+            @EquipGun.canceled -= instance.OnEquipGun;
         }
 
         public void RemoveCallbacks(IGunActions instance)
@@ -436,7 +407,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     }
     public interface IGunActions
     {
-        void OnEquip(InputAction.CallbackContext context);
-        void OnUnequip(InputAction.CallbackContext context);
+        void OnEquipGun(InputAction.CallbackContext context);
     }
 }

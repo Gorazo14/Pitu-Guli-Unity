@@ -158,18 +158,9 @@
             "id": "176ec945-9f22-423b-a07e-d26c0a468bec",
             "actions": [
                 {
-                    "name": "Equip",
+                    "name": "EquipGun",
                     "type": "Button",
                     "id": "5fbdf834-f935-4d24-b50f-83e7e864a10f",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Unequip",
-                    "type": "Button",
-                    "id": "4ee39818-863b-44db-8a09-9f4877fdba93",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -180,22 +171,11 @@
                 {
                     "name": "",
                     "id": "87323e15-7705-450e-8b48-a0eaff93c37a",
-                    "path": "<Keyboard>/2",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Equip",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "8c95583f-9297-49d7-989a-b2facc1850ed",
                     "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Unequip",
+                    "action": "EquipGun",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
