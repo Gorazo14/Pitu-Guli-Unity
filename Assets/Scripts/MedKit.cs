@@ -4,5 +4,10 @@ using UnityEngine;
 
 public class MedKit : MonoBehaviour
 {
-    
+    [SerializeField] private PickUpSO pickUpSO;
+
+    public PickUpSO GetPickUpSO ()
+    {
+        return pickUpSO;
+    }
 }

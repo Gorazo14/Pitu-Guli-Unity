@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System;
 
 public class Inventory : MonoBehaviour, IDropHandler
 {
@@ -25,29 +26,57 @@ public class Inventory : MonoBehaviour, IDropHandler
         player.OnItemPickedUp += Player_OnItemPickedUp;
     }
     
-    private void Player_OnItemPickedUp(object sender, System.EventArgs e)
+    private void Player_OnItemPickedUp(object sender, Player.OnItemPickedUpEventArgs e)
     {
-        foreach (ItemSlot slot in slots)
+        if (!e.medkit.GetPickUpSO().isStackable)
         {
-            if (!slot.HasItem())
+            foreach (ItemSlot slot in slots)
             {
-                foreach (Item item in items)
+                if (!slot.HasItem())
                 {
-                    if (!item.gameObject.activeSelf)
+                    foreach (Item item in items)
                     {
-                        item.SetParentItemSlot(slot);
-                        slot.SetItem(item);
-                        item.GetItemRectTransform().anchoredPosition = slot.GetItemSlotRectTransform().anchoredPosition;
+                        if (!item.gameObject.activeSelf)
+                        {
+                            item.SetParentItemSlot(slot);
+                            slot.SetItem(item);
+                            item.GetItemRectTransform().anchoredPosition = slot.GetItemSlotRectTransform().anchoredPosition;
 
-                        item.gameObject.SetActive(true);
+                            item.gameObject.SetActive(true);
 
-                        break;
+                            break;
+                        }
                     }
-                }
 
-                break;
+                    break;
+                }
+            }
+        }else
+        {
+            foreach (ItemSlot slot in slots)
+            {
+                int itemsOnSlot = 0;
+                if (itemsOnSlot < e.medkit.GetPickUpSO().maxStack)
+                {
+                    foreach (Item item in items)
+                    {
+                        if (!item.gameObject.activeSelf)
+                        {
+                            item.SetParentItemSlot(slot);
+                            slot.SetItem(item);
+                            item.GetItemRectTransform().anchoredPosition = slot.GetItemSlotRectTransform().anchoredPosition;
+
+                            item.gameObject.SetActive(true);
+
+                            itemsOnSlot++;
+                            break;
+                        }
+                    }
+                    break;
+                }
             }
         }
+        
     }
     
     private void GameInput_OnInventoryOpenClose(object sender, System.EventArgs e)

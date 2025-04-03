@@ -7,7 +7,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {   
-    public event EventHandler OnItemPickedUp;
+    public event EventHandler<OnItemPickedUpEventArgs> OnItemPickedUp;
+
+    public class OnItemPickedUpEventArgs : EventArgs
+    {
+        public MedKit medkit;
+        public Player player;
+    }
 
     [SerializeField] private GameInput gameInput;
     [SerializeField] private CharacterController controller;
@@ -53,7 +59,10 @@ public class Player : MonoBehaviour
             pickUpText.SetActive(false);
             hitInfo.transform.gameObject.SetActive(false);
 
-            OnItemPickedUp?.Invoke(this, EventArgs.Empty);
+            OnItemPickedUp?.Invoke(this, new OnItemPickedUpEventArgs
+            {
+                medkit = hitInfo.transform.gameObject.GetComponent<MedKit>()
+            });
         }
     }
 
