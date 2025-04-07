@@ -15,6 +15,9 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
     private ItemSlot itemSlot;
     private ItemSlot previousItemSlot;
 
+    private bool isStackable;
+    private PickUpSO pickUpSO;
+
     private void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
@@ -26,6 +29,15 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 
         previousItemSlot = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot();
         eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().ClearItem();
+
+        if (eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().itemsOnSlotCount > 0)
+        {
+            eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().itemsOnSlotCount--;
+        }
+        if (eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().itemsOnSlotCount <= 0)
+        {
+            eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().transform.GetChild(0).gameObject.SetActive(false);
+        }
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -50,8 +62,28 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 
     public void OnDrop(PointerEventData eventData)
     {
-        eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
-        eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().SetItem(eventData.pointerDrag.GetComponent<Item>());
+        if (eventData.pointerDrag.GetComponent<Item>().GetStackability() && GetStackability())
+        {
+            if (GetParentItemSlot().itemsOnSlotCount < GetPickUpSO().maxStack)
+            {
+                eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
+                eventData.pointerDrag.GetComponent<Item>().SetParentItemSlot(GetParentItemSlot());
+
+                eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().itemsOnSlotCount++;
+                eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().transform.GetChild(0).gameObject.SetActive(true);
+            }else
+            {
+                eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
+                eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().SetItem(eventData.pointerDrag.GetComponent<Item>());
+
+                eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().transform.GetChild(0).gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
+            eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().SetItem(eventData.pointerDrag.GetComponent<Item>());
+        }
     }
 
     public void SetParentItemSlot(ItemSlot itemSlot)
@@ -69,5 +101,21 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
     public RectTransform GetItemRectTransform()
     {
         return rectTransform;
+    }
+    public bool GetStackability()
+    {
+        return isStackable;
+    }
+    public void SetStackability(bool isStackable)
+    {
+        this.isStackable = isStackable;
+    }
+    public void SetPickUpSO(PickUpSO pickUpSO)
+    {
+        this.pickUpSO = pickUpSO;
+    }
+    public PickUpSO GetPickUpSO()
+    {
+        return pickUpSO;
     }
 }

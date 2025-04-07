@@ -6,7 +6,7 @@ public class MedKit : MonoBehaviour
 {
     [SerializeField] private PickUpSO pickUpSO;
 
-    public PickUpSO GetPickUpSO ()
+    public PickUpSO GetPickUpSO()
     {
         return pickUpSO;
     }
