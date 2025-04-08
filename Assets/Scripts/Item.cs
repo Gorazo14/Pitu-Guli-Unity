@@ -13,7 +13,6 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
     private CanvasGroup canvasGroup;
 
     private ItemSlot itemSlot;
-    private ItemSlot previousItemSlot;
 
     private bool isStackable;
     private PickUpSO pickUpSO;
@@ -27,16 +26,11 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
         canvasGroup.alpha = 0.7f;
         canvasGroup.blocksRaycasts = false;
 
-        previousItemSlot = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot();
         eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().ClearItem();
 
-        if (eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().itemsOnSlotCount > 0)
+        if (eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().itemsOnSlotCount > 0)
         {
-            eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().itemsOnSlotCount--;
-        }
-        if (eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().itemsOnSlotCount <= 0)
-        {
-            eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().transform.GetChild(0).gameObject.SetActive(false);
+            eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().itemsOnSlotCount--;
         }
     }
 
@@ -64,25 +58,28 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
     {
         if (eventData.pointerDrag.GetComponent<Item>().GetStackability() && GetStackability())
         {
+            // Both items are stackable
             if (GetParentItemSlot().itemsOnSlotCount < GetPickUpSO().maxStack)
             {
+                // There is space on the item slot
                 eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
                 eventData.pointerDrag.GetComponent<Item>().SetParentItemSlot(GetParentItemSlot());
 
                 eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().itemsOnSlotCount++;
-                eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().transform.GetChild(0).gameObject.SetActive(true);
             }else
             {
+                // There is not space on the item slot
                 eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
-                eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().SetItem(eventData.pointerDrag.GetComponent<Item>());
+                eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().SetItem(eventData.pointerDrag.GetComponent<Item>());
 
-                eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().transform.GetChild(0).gameObject.SetActive(true);
+                eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().itemsOnSlotCount++;
             }
         }
         else
         {
+            // At least one of the items is not stackable
             eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
-            eventData.pointerDrag.GetComponent<Item>().GetPreviousParentItemSlot().SetItem(eventData.pointerDrag.GetComponent<Item>());
+            eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().SetItem(eventData.pointerDrag.GetComponent<Item>());
         }
     }
 
@@ -94,9 +91,9 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
     {
         return itemSlot;
     }
-    public ItemSlot GetPreviousParentItemSlot()
+    public void ClearParentItemSlot()
     {
-        return previousItemSlot;
+        this.itemSlot = null;
     }
     public RectTransform GetItemRectTransform()
     {

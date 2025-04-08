@@ -17,7 +17,6 @@ public class Inventory : MonoBehaviour, IDropHandler
 
     [SerializeField] private ItemSlot[] slots;
     [SerializeField] private Item[] items;
-    [SerializeField] private GameObject[] counterGameObjects;
 
     private int i = 0;
  
@@ -30,7 +29,8 @@ public class Inventory : MonoBehaviour, IDropHandler
     }
     
     private void Player_OnItemPickedUp(object sender, Player.OnItemPickedUpEventArgs e)
-    {   
+    {
+        Debug.Log(i);
         if (!e.medkit.GetPickUpSO().isStackable)
         {
             // Item is not stackable
@@ -62,7 +62,11 @@ public class Inventory : MonoBehaviour, IDropHandler
         {
             while (i < slots.Length)
             {
-                counterGameObjects[i].SetActive(true);
+                if (slots[i].itemsOnSlotCount >= e.medkit.GetPickUpSO().maxStack)
+                {
+                    // Go to next slot
+                    i++;
+                }
                 if (!slots[i].HasItem() || slots[i].itemsOnSlotCount < e.medkit.GetPickUpSO().maxStack)
                 {
                     foreach (Item item in items)
@@ -82,13 +86,8 @@ public class Inventory : MonoBehaviour, IDropHandler
                             break;
                         }
                     }
-                    if (slots[i].itemsOnSlotCount >= e.medkit.GetPickUpSO().maxStack)
-                    {
-                        i++;
-                        slots[i].itemsOnSlotCount = 0;
-                    }
-                    break;
                 }
+                break;
             }
             
         }
@@ -120,5 +119,7 @@ public class Inventory : MonoBehaviour, IDropHandler
 
         eventData.pointerDrag.gameObject.GetComponent<Item>().GetCanvasGroup().alpha = 1f;
         eventData.pointerDrag.gameObject.GetComponent<Item>().GetCanvasGroup().blocksRaycasts = true;
+
+        i = 0;
     }
 }
