@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pickUpName: AmmoBox
   isStackable: 0
-  maxStack: 0
+  maxStack: 1

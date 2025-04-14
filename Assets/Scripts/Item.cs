@@ -26,7 +26,7 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
         canvasGroup.alpha = 0.7f;
         canvasGroup.blocksRaycasts = false;
 
-        eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().ClearItem();
+        eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().ClearItem(eventData.pointerDrag.GetComponent<Item>());
 
         if (eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().itemsOnSlotCount > 0)
         {

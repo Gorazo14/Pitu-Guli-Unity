@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 
     public class OnItemPickedUpEventArgs : EventArgs
     {
-        public MedKit medkit;
+        public PickUp pickUp;
         public Player player;
     }
 
@@ -61,7 +61,7 @@ public class Player : MonoBehaviour
 
             OnItemPickedUp?.Invoke(this, new OnItemPickedUpEventArgs
             {
-                medkit = hitInfo.transform.gameObject.GetComponent<MedKit>()
+                pickUp = hitInfo.transform.gameObject.GetComponent<PickUp>()
             });
         }
     }

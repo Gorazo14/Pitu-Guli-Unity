@@ -8,12 +8,14 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 {
     [SerializeField] private RectTransform itemSlotRectTransform;
 
-    private Item item;
+    private List<Item> itemList;
     public int itemsOnSlotCount;
 
     private void Awake()
     {
         gameObject.SetActive(true);
+
+        itemList = new List<Item>();
     }
     private void Update()
     {
@@ -45,7 +47,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             else
             {
                 // There is an item on the item slot
-                if (eventData.pointerDrag.GetComponent<Item>().GetStackability() && GetItem().GetStackability())
+                if (eventData.pointerDrag.GetComponent<Item>().GetStackability() && GetItemList()[0].GetStackability())
                 {
                     // And both items are stackable
                     if (itemsOnSlotCount < eventData.pointerDrag.GetComponent<Item>().GetPickUpSO().maxStack)
@@ -81,18 +83,18 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 
     public void SetItem(Item item)
     {
-        this.item = item;
+        itemList.Add(item);
     }
-    public Item GetItem()
+    public List<Item> GetItemList()
     {
-        return item;
+        return itemList;
     }
     public bool HasItem()
     {
-        return item != null;
+        return itemList.Count > 0;
     }
-    public void ClearItem()
+    public void ClearItem(Item item)
     {
-        item = null;
+        itemList.Remove(item);
     }
 }
