@@ -6,6 +6,7 @@ using System;
 
 public class Inventory : MonoBehaviour, IDropHandler
 {
+    [SerializeField] private Transform inventoryTransform;
     [SerializeField] private GameInput gameInput;
     [SerializeField] private GameObject inventoryBackground;
     [SerializeField] private Player player;
@@ -16,7 +17,7 @@ public class Inventory : MonoBehaviour, IDropHandler
     [SerializeField] private Gun gun;
 
     [SerializeField] private ItemSlot[] slots;
-    [SerializeField] private Item[] items;
+    [SerializeField] private Item item;
 
     private int i = 0;
  
@@ -27,45 +28,78 @@ public class Inventory : MonoBehaviour, IDropHandler
         gameInput.OnInventoryOpenClose += GameInput_OnInventoryOpenClose;
         player.OnItemPickedUp += Player_OnItemPickedUp;
     }
-    
+
     private void Player_OnItemPickedUp(object sender, Player.OnItemPickedUpEventArgs e)
-    {    
-        while (i < slots.Length)
+    {
+        /*
+        if (!e.pickUp.GetPickUpSO().isStackable)
         {
-            if (slots[i].itemsOnSlotCount >= e.pickUp.GetPickUpSO().maxStack || (!e.pickUp.GetPickUpSO().isStackable))
+            while (i < slots.Length)
             {
-                // Go to next slot
-                i++;
-            }
-            if (!slots[i].HasItem() || slots[i].itemsOnSlotCount < e.pickUp.GetPickUpSO().maxStack)
-            {
-                foreach (Item item in items)
+                if (slots[i].HasNonStackableItem())
                 {
-                    if (!item.gameObject.activeSelf)
+                    // Go to next slot
+                    i++;
+                }
+                if (!slots[i].HasItem())
+                {
+                    foreach (Item item in items)
                     {
-                        item.SetParentItemSlot(slots[i]);
-                        slots[i].SetItem(item);
-                        item.GetItemRectTransform().anchoredPosition = slots[i].GetItemSlotRectTransform().anchoredPosition;
+                        if (!item.gameObject.activeSelf)
+                        {
+                            item.SetParentItemSlot(slots[i]);
+                            slots[i].SetItem(item);
+                            item.GetItemRectTransform().anchoredPosition = slots[i].GetItemSlotRectTransform().anchoredPosition;
 
-                        if (e.pickUp.GetPickUpSO().isStackable)
-                        {
-                            item.SetStackability(true);
-                        }else
-                        {
                             item.SetStackability(false);
+
+                            item.SetPickUpSO(e.pickUp.GetPickUpSO());
+
+                            item.gameObject.SetActive(true);
+
+                            slots[i].itemsOnSlotCount++;
+                            break;
                         }
-                        item.SetPickUpSO(e.pickUp.GetPickUpSO());
-
-                        item.gameObject.SetActive(true);
-
-                        slots[i].itemsOnSlotCount++;
-                        break;
                     }
                 }
+                break;
             }
-            break;
-                
         }
+        else
+        {
+            while (i < slots.Length)
+            {
+                if (slots[i].itemsOnSlotCount >= e.pickUp.GetPickUpSO().maxStack || slots[i].HasNonStackableItem())
+                {
+                    // Go to next slot
+                    i++;
+                }
+                if (!slots[i].HasItem() || slots[i].itemsOnSlotCount < e.pickUp.GetPickUpSO().maxStack)
+                {
+                    foreach (Item item in items)
+                    {
+                        if (!item.gameObject.activeSelf)
+                        {
+                            item.SetParentItemSlot(slots[i]);
+                            slots[i].SetItem(item);
+                            item.GetItemRectTransform().anchoredPosition = slots[i].GetItemSlotRectTransform().anchoredPosition;
+
+                            item.SetStackability(true);
+
+                            item.SetPickUpSO(e.pickUp.GetPickUpSO());
+
+                            Debug.Log(item.transform.name);
+                            item.gameObject.SetActive(true);
+
+                            slots[i].itemsOnSlotCount++;
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        */
     }
     
     private void GameInput_OnInventoryOpenClose(object sender, System.EventArgs e)

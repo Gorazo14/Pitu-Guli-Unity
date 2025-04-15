@@ -10,6 +10,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 
     private List<Item> itemList;
     public int itemsOnSlotCount;
+    
 
     private void Awake()
     {
@@ -96,5 +97,20 @@ public class ItemSlot : MonoBehaviour, IDropHandler
     public void ClearItem(Item item)
     {
         itemList.Remove(item);
+    }
+    public bool HasNonStackableItem()
+    {
+        foreach (Item item in itemList)
+        {
+            if (item.GetStackability())
+            {
+                return false;
+            }
+        }
+        if (!HasItem())
+        {
+            return false;
+        }
+        return true;
     }
 }
