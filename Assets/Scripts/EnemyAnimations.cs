@@ -19,6 +19,5 @@ public class EnemyAnimations : MonoBehaviour
     private void Update()
     {
         animator.SetBool(IS_RUNNING, enemyFind.IsEnemyMoving());
-        animator.SetBool(IS_PLAYER_IN_RANGE, enemyFind.IsPlayerInRange());
     }
 }

@@ -7,6 +7,8 @@ namespace GDL
 {
     public class EnemyShooter : MonoBehaviour
     {
+        public static event EventHandler OnAnyPlayerHit;
+
         [Header("General")]
         public Transform shootPoint;
         public Transform gunPoint;
@@ -23,6 +25,9 @@ namespace GDL
         private EnemyReferences enemyReferences;
         private int currentShotCount = 0;  // Track how many shots have been fired
         private bool isReloading = false;  // Track if currently reloading
+
+        private float nextTimeToFire;
+        [SerializeField] private float fireRate = 3f;
 
         private Vector3 GetDirection()
         {
@@ -64,8 +69,13 @@ namespace GDL
                 return;
 
             Vector3 direction = GetDirection();
-            if (Physics.Raycast(shootPoint.position, direction, out RaycastHit hit, float.MaxValue, layerMask))
+            if (Physics.Raycast(shootPoint.position, direction, out RaycastHit hit, float.MaxValue, layerMask) && Time.time >= nextTimeToFire)
             {
+                if (hit.transform.GetComponent<Player>() != null)
+                {
+                    OnAnyPlayerHit?.Invoke(this, EventArgs.Empty);
+                    nextTimeToFire = Time.time + 1f / fireRate;
+                }
                 // Draw the debug raycast line with a duration matching the bullet trail's lifetime
                 Debug.DrawLine(shootPoint.position, hit.point, Color.red, bulletTrail.time);
                 // Spawn bullet trail
@@ -119,7 +129,7 @@ namespace GDL
 
         void Update()
         {
-            // You can add other update logic here if needed
+            
         }
     }
 }

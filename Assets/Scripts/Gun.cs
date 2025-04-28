@@ -1,12 +1,15 @@
+using System;
 using UnityEngine;
 
 
 public class Gun : MonoBehaviour
 {
+    [SerializeField] private Transform shootParticleEffect;
+
     [SerializeField] private Player player;
     [SerializeField] private float damage = 10f;
     [SerializeField] private float range = 100f;
-    [SerializeField] private float fireRate = 10000f;
+    [SerializeField] private float fireRate = 1f;
     [SerializeField] private Transform gunTip;
 
 
@@ -39,8 +42,9 @@ public class Gun : MonoBehaviour
             if (target != null)
             {
                 target.TakeDamage(damage);
-                Debug.Log(target.health);
             }
         }
+        Transform shootParticleEffectTransform = Instantiate(shootParticleEffect, gunTip.position, gunTip.rotation);
+        shootParticleEffectTransform.gameObject.SetActive(true);
     }
 }

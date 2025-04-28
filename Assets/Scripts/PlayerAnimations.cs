@@ -14,6 +14,7 @@ public class PlayerAnimations : MonoBehaviour
 
     [SerializeField] private Player player;
     [SerializeField] private GameObject gun;
+    [SerializeField] private GameObject crosshair;
     [SerializeField] private Rig handsRig;
     [SerializeField] private Rig chainRig;
 
@@ -65,11 +66,13 @@ public class PlayerAnimations : MonoBehaviour
         if (gun.activeSelf)
         {
             gun.SetActive(false);
+            crosshair.SetActive(false);
             handsRig.weight = 0f;
             chainRig.weight = 0f;
         }else
         {
             gun.SetActive(true);
+            crosshair.SetActive(true);
             handsRig.weight = 1f;
             chainRig.weight = 1f;
         }
