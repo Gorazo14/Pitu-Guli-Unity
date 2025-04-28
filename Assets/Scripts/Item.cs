@@ -9,29 +9,22 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
 {
     [SerializeField] private Canvas canvas;
 
-    [SerializeField] private RectTransform rectTransform;
+    private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
 
     private ItemSlot itemSlot;
-
-    private bool isStackable;
     private PickUpSO pickUpSO;
-
     private void Start()
     {
         canvasGroup = GetComponent<CanvasGroup>();
+        rectTransform = GetComponent<RectTransform>();  
     }
     public void OnBeginDrag(PointerEventData eventData)
     {
         canvasGroup.alpha = 0.7f;
         canvasGroup.blocksRaycasts = false;
 
-        eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().ClearItem(eventData.pointerDrag.GetComponent<Item>());
-
-        if (eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().itemsOnSlotCount > 0)
-        {
-            eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().itemsOnSlotCount--;
-        }
+        eventData.pointerDrag.GetComponent<Item>().GetItemSlot().ClearItem();
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -45,6 +38,26 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
         canvasGroup.blocksRaycasts = true;
     }
 
+    public void OnDrop(PointerEventData eventData)
+    {
+        if (eventData.pointerDrag != null)
+        {
+            Item item = eventData.pointerDrag.GetComponent<Item>();
+            if ((item.GetPickUpSO().isStackable && GetItemSlot().GetItemsOnSlotCount() < item.GetPickUpSO().maxStack && GetItemSlot().HasItem() && GetItemSlot().GetItem().GetPickUpSO().isStackable) || (!GetItemSlot().HasItem()))
+            {
+                item.GetComponent<RectTransform>().anchoredPosition = GetComponent<RectTransform>().anchoredPosition;
+
+                GetItemSlot().SetItem(item);
+                item.SetItemSlot(GetItemSlot());
+            }
+            else
+            {
+                item.GetComponent<RectTransform>().anchoredPosition = item.GetItemSlot().GetComponent<RectTransform>().anchoredPosition;
+
+                item.GetItemSlot().SetItem(item);
+            }
+        }
+    }
     public void OnInitializePotentialDrag(PointerEventData eventData)
     {
         eventData.useDragThreshold = false;
@@ -54,62 +67,17 @@ public class Item : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHand
         return canvasGroup;
     }
 
-    public void OnDrop(PointerEventData eventData)
-    {
-        if (eventData.pointerDrag.GetComponent<Item>().GetStackability() && GetStackability())
-        {
-            // Both items are stackable
-            if (GetParentItemSlot().itemsOnSlotCount < GetPickUpSO().maxStack)
-            {
-                // There is space on the item slot
-                eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
-                eventData.pointerDrag.GetComponent<Item>().SetParentItemSlot(GetParentItemSlot());
-
-                eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().itemsOnSlotCount++;
-            }else
-            {
-                // There is not space on the item slot
-                eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
-                eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().SetItem(eventData.pointerDrag.GetComponent<Item>());
-
-                eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().itemsOnSlotCount++;
-            }
-        }
-        else
-        {
-            // At least one of the items is not stackable
-            eventData.pointerDrag.GetComponent<RectTransform>().anchoredPosition = eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().GetItemSlotRectTransform().anchoredPosition;
-            eventData.pointerDrag.GetComponent<Item>().GetParentItemSlot().SetItem(eventData.pointerDrag.GetComponent<Item>());
-        }
-    }
-
-    public void SetParentItemSlot(ItemSlot itemSlot)
+    public void SetItemSlot(ItemSlot itemSlot)
     {
         this.itemSlot = itemSlot;
     }
-    public ItemSlot GetParentItemSlot()
+    public ItemSlot GetItemSlot()
     {
         return itemSlot;
     }
-    public void ClearParentItemSlot()
-    {
-        this.itemSlot = null;
-    }
-    public RectTransform GetItemRectTransform()
-    {
-        return rectTransform;
-    }
-    public bool GetStackability()
-    {
-        return isStackable;
-    }
-    public void SetStackability(bool isStackable)
-    {
-        this.isStackable = isStackable;
-    }
     public void SetPickUpSO(PickUpSO pickUpSO)
     {
-        this.pickUpSO = pickUpSO;
+        this.pickUpSO = pickUpSO;   
     }
     public PickUpSO GetPickUpSO()
     {

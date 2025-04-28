@@ -9,10 +9,11 @@ public class ItemCounter : MonoBehaviour
 
     private void Awake()
     {
-        counterText = GetComponent<TextMeshProUGUI>();
+        counterText = GetComponent<TextMeshProUGUI>();  
     }
+
     private void Update()
     {
-        counterText.text = transform.parent.GetComponent<ItemSlot>().itemsOnSlotCount.ToString();
+        counterText.text = transform.parent.GetComponent<ItemSlot>().GetItemsOnSlotCount().ToString();
     }
 }

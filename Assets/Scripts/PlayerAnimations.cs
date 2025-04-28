@@ -7,7 +7,6 @@ using UnityEngine.Animations.Rigging;
 
 public class PlayerAnimations : MonoBehaviour
 {
-    [SerializeField] private GameInput gameInput;
     private Animator animator;
 
     private float velocityX = 0.0f;
@@ -29,7 +28,7 @@ public class PlayerAnimations : MonoBehaviour
         gun.SetActive(false);
         animator = GetComponent<Animator>();
 
-        gameInput.OnGunEquip += GameInput_OnGunEquip;
+        GameInput.Instance.OnGunEquip += GameInput_OnGunEquip;
     }
 
 

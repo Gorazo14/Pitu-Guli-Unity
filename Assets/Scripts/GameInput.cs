@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class GameInput : MonoBehaviour
 {
+    public static GameInput Instance { get; private set; }
+
     public event EventHandler OnJump;
     public event EventHandler OnRun;
     public event EventHandler OnRunExit;
@@ -14,7 +16,10 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnInventoryOpenClose;
 
     private PlayerInputActions playerInputActions;
-
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         playerInputActions = new PlayerInputActions();

@@ -8,4 +8,6 @@ public class PickUpSO : ScriptableObject
     public string pickUpName;
     public bool isStackable;
     public int maxStack;
+    public Transform pickUpPrefab;
+    public Sprite pickUpSprite;
 }

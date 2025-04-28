@@ -7,15 +7,15 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {   
+    public static Player Instance { get; private set; }
+
     public event EventHandler<OnItemPickedUpEventArgs> OnItemPickedUp;
 
     public class OnItemPickedUpEventArgs : EventArgs
     {
         public PickUp pickUp;
-        public Player player;
     }
 
-    [SerializeField] private GameInput gameInput;
     [SerializeField] private CharacterController controller;
 
     [SerializeField] private float walkSpeed = 2f;
@@ -42,12 +42,16 @@ public class Player : MonoBehaviour
     private bool isPickupableInWay;
     private RaycastHit hitInfo;
 
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
-        gameInput.OnRun += GameInput_OnRun;
-        gameInput.OnRunExit += GameInput_OnRunExit;
-        gameInput.OnJump += GameInput_OnJump;
-        gameInput.OnPickUp += GameInput_OnPickUp;
+        GameInput.Instance.OnRun += GameInput_OnRun;
+        GameInput.Instance.OnRunExit += GameInput_OnRunExit;
+        GameInput.Instance.OnJump += GameInput_OnJump;
+        GameInput.Instance.OnPickUp += GameInput_OnPickUp;
 
         pickUpText.SetActive(false);
         isPickupableInWay = false;

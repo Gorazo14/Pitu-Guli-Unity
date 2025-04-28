@@ -16,6 +16,7 @@ namespace GDL
         public LayerMask obstacleLayerMask; 
         public float visionCheckInterval = 0.2f; 
         private float nextVisionCheck;
+        private bool isInRange;
 
         private void Awake()
         {
@@ -40,8 +41,8 @@ namespace GDL
 
             if (target == null) return;
 
-            bool inRange = Vector3.Distance(transform.position, target.position) <= shootingDistance;
-            if (inRange)
+            isInRange = Vector3.Distance(transform.position, target.position) <= shootingDistance;
+            if (isInRange)
             {
                 LookAtTarget();
                 enemyShooter.Shoot();
@@ -129,6 +130,15 @@ namespace GDL
                 pathUpdateDeadline = Time.time + enemyReferences.pathUpdatedelay;
                 enemyReferences.navMeshagent.SetDestination(target.position);
             }
+        }
+
+        public bool IsEnemyMoving()
+        {
+            return enemyReferences.navMeshagent.velocity.magnitude != 0;
+        }
+        public bool IsPlayerInRange()
+        {
+            return isInRange;
         }
     }
 }
