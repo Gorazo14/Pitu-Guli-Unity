@@ -19,9 +19,7 @@ public class GameInput : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-    }
-    private void Start()
-    {
+
         playerInputActions = new PlayerInputActions();
         playerInputActions.Enable();
 

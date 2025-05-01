@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+    [SerializeField] private Camera fpsCamera;
     [SerializeField] private Transform shootParticleEffect;
 
     [SerializeField] private Player player;
@@ -34,7 +35,7 @@ public class Gun : MonoBehaviour
     void Shoot()
     {
         RaycastHit hit;
-        if (Physics.Raycast(gunTip.position, gunTip.forward, out hit, range))
+        if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range))
         {
             Debug.Log(hit.transform.name);
 
@@ -45,6 +46,5 @@ public class Gun : MonoBehaviour
             }
         }
         Transform shootParticleEffectTransform = Instantiate(shootParticleEffect, gunTip.position, gunTip.rotation);
-        shootParticleEffectTransform.gameObject.SetActive(true);
     }
 }

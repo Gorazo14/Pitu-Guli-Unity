@@ -19,7 +19,7 @@ public class InventoryUI : MonoBehaviour, IDropHandler
     private int i = 0;
     private void Start()
     {
-        gameObject.SetActive(false);
+        inventoryTransform.gameObject.SetActive(false);
         Player.Instance.enabled = true;
         GameInput.Instance.OnInventoryOpenClose += GameInput_OnInventoryOpenClose;
         Player.Instance.OnItemPickedUp += Player_OnItemPickedUp;
@@ -36,7 +36,7 @@ public class InventoryUI : MonoBehaviour, IDropHandler
             }
         }
 
-        RectTransform itemTransform = Instantiate(itemPrefab, transform);
+        RectTransform itemTransform = Instantiate(itemPrefab, inventoryTransform);
         Item item = itemTransform.GetComponent<Item>();
 
         item.SetPickUpSO(e.pickUp.GetPickUpSO());
@@ -51,15 +51,15 @@ public class InventoryUI : MonoBehaviour, IDropHandler
 
     private void GameInput_OnInventoryOpenClose(object sender, System.EventArgs e)
     {
-        if (gameObject.activeSelf)
+        if (inventoryTransform.gameObject.activeSelf)
         {
-            gameObject.SetActive(false);
+            inventoryTransform.gameObject.SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
             mouseLook.enabled = true;
             gun.enabled = true;
         }else
         {
-            gameObject.SetActive(true);
+            inventoryTransform.gameObject.SetActive(true);
             Cursor.lockState = CursorLockMode.None;
             mouseLook.enabled = false;
             gun.enabled = false;

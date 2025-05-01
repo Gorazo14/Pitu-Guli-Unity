@@ -9,10 +9,10 @@ public class HealthBar : MonoBehaviour
 
     private void Start()
     {
-        transform.parent.GetComponent<Target>().OnTargetHit += HealthBar_OnTargetHit;
+        transform.parent.GetComponent<Target>().OnTargetHit += Target_OnTargetHit;
     }
 
-    private void HealthBar_OnTargetHit(object sender, Target.OnTargetHitEventArgs e)
+    private void Target_OnTargetHit(object sender, Target.OnTargetHitEventArgs e)
     {
         image.fillAmount = e.healthNormalized;
     }
