@@ -187,6 +187,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""074278a1-3479-4034-9c1b-598561a69c13"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -198,6 +207,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""EquipGun"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""265600fc-8707-45e4-958a-dc4304f77999"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -216,6 +236,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         // Gun
         m_Gun = asset.FindActionMap("Gun", throwIfNotFound: true);
         m_Gun_EquipGun = m_Gun.FindAction("EquipGun", throwIfNotFound: true);
+        m_Gun_Reload = m_Gun.FindAction("Reload", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -356,11 +377,13 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Gun;
     private List<IGunActions> m_GunActionsCallbackInterfaces = new List<IGunActions>();
     private readonly InputAction m_Gun_EquipGun;
+    private readonly InputAction m_Gun_Reload;
     public struct GunActions
     {
         private @PlayerInputActions m_Wrapper;
         public GunActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @EquipGun => m_Wrapper.m_Gun_EquipGun;
+        public InputAction @Reload => m_Wrapper.m_Gun_Reload;
         public InputActionMap Get() { return m_Wrapper.m_Gun; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -373,6 +396,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @EquipGun.started += instance.OnEquipGun;
             @EquipGun.performed += instance.OnEquipGun;
             @EquipGun.canceled += instance.OnEquipGun;
+            @Reload.started += instance.OnReload;
+            @Reload.performed += instance.OnReload;
+            @Reload.canceled += instance.OnReload;
         }
 
         private void UnregisterCallbacks(IGunActions instance)
@@ -380,6 +406,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @EquipGun.started -= instance.OnEquipGun;
             @EquipGun.performed -= instance.OnEquipGun;
             @EquipGun.canceled -= instance.OnEquipGun;
+            @Reload.started -= instance.OnReload;
+            @Reload.performed -= instance.OnReload;
+            @Reload.canceled -= instance.OnReload;
         }
 
         public void RemoveCallbacks(IGunActions instance)
@@ -408,5 +437,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     public interface IGunActions
     {
         void OnEquipGun(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
 }

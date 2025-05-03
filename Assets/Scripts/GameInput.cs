@@ -14,6 +14,7 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnGunEquip;
     public event EventHandler OnPickUp;
     public event EventHandler OnInventoryOpenClose;
+    public event EventHandler OnReload;
 
     private PlayerInputActions playerInputActions;
     private void Awake()
@@ -29,6 +30,12 @@ public class GameInput : MonoBehaviour
         playerInputActions.Gun.EquipGun.performed += EquipGun_performed;
         playerInputActions.Player.PickUp.performed += PickUp_performed;
         playerInputActions.Player.Inventory.performed += Inventory_performed;
+        playerInputActions.Gun.Reload.performed += Reload_performed;
+    }
+
+    private void Reload_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnReload?.Invoke(this, EventArgs.Empty);
     }
 
     private void EquipGun_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

@@ -8,6 +8,7 @@ namespace GDL
     public class EnemyShooter : MonoBehaviour
     {
         public static event EventHandler OnAnyPlayerHit;
+        public static event EventHandler OnAnyEnemyShoot;
 
         [Header("General")]
         public Transform shootPoint;
@@ -17,6 +18,7 @@ namespace GDL
         [Header("Gun")]
         public Vector3 spread = new Vector3(0.06f, 0.06f, 0.06f);
         public TrailRenderer bulletTrail;
+        [SerializeField] private Transform muzzleFlashEffect;
 
         [Header("Ammo and Reload")]
         public int shotsBeforeReload = 5;  // Public variable for shots before reload
@@ -85,6 +87,8 @@ namespace GDL
 
             // Increment shot counter
             currentShotCount++;
+            OnAnyEnemyShoot?.Invoke(this, EventArgs.Empty);
+            Instantiate(muzzleFlashEffect, shootPoint.position, shootPoint.rotation);
 
             // Check if we need to reload
             if (currentShotCount >= shotsBeforeReload)
@@ -130,6 +134,11 @@ namespace GDL
         void Update()
         {
             
+        }
+
+        public Transform GetShootPoint()
+        {
+            return shootPoint;
         }
     }
 }
