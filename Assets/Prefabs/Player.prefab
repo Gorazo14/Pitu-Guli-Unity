@@ -59,37 +59,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!1 &979503155856330044
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5859358416799591274}
-  m_Layer: 7
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5859358416799591274
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 979503155856330044}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.001, y: 0, z: 0.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6694405375355841042}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1258652282020541588
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,6 +407,37 @@ MonoBehaviour:
     m_HintWeight: 1
     m_MaintainTargetPositionOffset: 0
     m_MaintainTargetRotationOffset: 0
+--- !u!1 &2973755621364193862
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6887554149123168446}
+  m_Layer: 7
+  m_Name: GunTip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6887554149123168446
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2973755621364193862}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.0033802767, y: -0.031185057, z: 0.0009561117, w: 0.9995075}
+  m_LocalPosition: {x: 0.0045, y: 0.0182, z: 0.1251}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6531000290848552314}
+  m_LocalEulerAnglesHint: {x: -0.384, y: -3.575, z: 0.122}
 --- !u!1 &4409024913748813477
 GameObject:
   m_ObjectHideFlags: 0
@@ -545,7 +545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 643c7c67753dd8444b79ffcc65664974, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 2662933838751274689}
   mouseSensitivity: 100
   playerBody: {fileID: 6694405375355841042}
 --- !u!114 &8857687754742080863
@@ -745,6 +745,7 @@ GameObject:
   - component: {fileID: 6694405375355841042}
   - component: {fileID: 2627996320224552129}
   - component: {fileID: 2662933838751274689}
+  - component: {fileID: 6187322471508440938}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -767,7 +768,6 @@ Transform:
   m_Children:
   - {fileID: 7545362703194423175}
   - {fileID: 9218535022443406965}
-  - {fileID: 5859358416799591274}
   - {fileID: 8044004281080144013}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -784,7 +784,7 @@ CharacterController:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1280
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -824,10 +824,24 @@ MonoBehaviour:
   isJumping: 0
   isRunning: 0
   pickUpText: {fileID: 0}
-  pickupDistance: 0
+  pickupDistance: 1
   pickupableLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1280
+--- !u!114 &6187322471508440938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8306730521617825498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eae5cd7091b01744ad125ca8debd04a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 200
+  damage: 10
 --- !u!1 &8442850320970406528
 GameObject:
   m_ObjectHideFlags: 0
@@ -937,7 +951,23 @@ PrefabInstance:
     - target: {fileID: 3942398998581800199, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}
       propertyPath: gunTip
       value: 
-      objectReference: {fileID: 9218535022443406965}
+      objectReference: {fileID: 6887554149123168446}
+    - target: {fileID: 3942398998581800199, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2662933838751274689}
+    - target: {fileID: 3942398998581800199, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}
+      propertyPath: fireRate
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3942398998581800199, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}
+      propertyPath: fpsCamera
+      value: 
+      objectReference: {fileID: 8014132028965672083}
+    - target: {fileID: 3942398998581800199, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}
+      propertyPath: shootParticleEffect
+      value: 
+      objectReference: {fileID: 471318, guid: 51b76f616384d4946bed4ecc9a6c2c3e, type: 3}
     - target: {fileID: 5130425840464543578, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}
       propertyPath: m_Name
       value: gun
@@ -1015,6 +1045,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5510505653840373216, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1528452039657201799}
+    - targetCorrespondingSourceObject: {fileID: 5510505653840373216, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6887554149123168446}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}
 --- !u!1 &5902273551270965184 stripped
@@ -1641,7 +1674,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4888428231f79ae48a96d3770549d752, type: 3}
       propertyPath: m_Name
-      value: Idle
+      value: PlayerVisual
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4888428231f79ae48a96d3770549d752, type: 3}
       propertyPath: m_Layer

@@ -186,9 +186,10 @@ MonoBehaviour:
     m_Bits: 4294967295
   spread: {x: 0.06, y: 0.06, z: 0.06}
   bulletTrail: {fileID: 0}
+  muzzleFlashEffect: {fileID: 471318, guid: 51b76f616384d4946bed4ecc9a6c2c3e, type: 3}
   shotsBeforeReload: 5
   reloadTime: 3
-  fireRate: 4
+  fireRate: 3
 --- !u!195 &4550882217628923640
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -223,6 +224,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa9720c51bff7c040bfefe083efe9d05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gun: {fileID: 3888972553695720798}
+  healthBar: {fileID: 8621230802846300760}
 --- !u!1 &4856373802055164555
 GameObject:
   m_ObjectHideFlags: 0
@@ -636,6 +639,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}
+--- !u!1 &3888972553695720798 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5130425840464543578, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}
+  m_PrefabInstance: {fileID: 8271574231923902980}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4518156346603253732 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5510505653840373216, guid: d6dfa6e268ff0774b89f03c1f60801b1, type: 3}

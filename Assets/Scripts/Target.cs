@@ -34,7 +34,10 @@ public class Target : MonoBehaviour
             healthBar.SetActive(false);
         } 
     }
-
+    public bool IsAlive()
+    {
+        return health > 0f;
+    }
     private void Die()
     {
         Destroy(gameObject);
