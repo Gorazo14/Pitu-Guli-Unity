@@ -27,12 +27,11 @@ public class Gun : MonoBehaviour
     [SerializeField] private int maxBullets = 50;
     [SerializeField] private int magazineBullets = 8;
     [SerializeField] private int fullBullets = 50;
+    [SerializeField] private float reloadTime = 1.5f;
     private int shotsFired = 0;
 
 
     private float nextTimeToFire = 0f;
-
-    private float reloadTime = 3f;
     private bool isAbleToShoot = true;
 
     private void Start()

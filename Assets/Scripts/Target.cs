@@ -6,6 +6,7 @@ public class Target : MonoBehaviour
 {
     public event EventHandler<OnTargetHitEventArgs> OnTargetHit;
     public event EventHandler OnEnemyDeath;
+    public static event EventHandler OnAnyEnemyDeath;
 
     [SerializeField] private GameObject gun;
     [SerializeField] private GameObject healthBar;
@@ -27,8 +28,9 @@ public class Target : MonoBehaviour
         });
         if (health <= 0f)
         {
-            Invoke("Die", 2f);
+            Invoke(nameof(Die), 2f);
             OnEnemyDeath?.Invoke(this, EventArgs.Empty);
+            OnAnyEnemyDeath?.Invoke(this, EventArgs.Empty);
             GetComponent<EnemyFind>().enabled = false;
             gun.SetActive(false);
             healthBar.SetActive(false);

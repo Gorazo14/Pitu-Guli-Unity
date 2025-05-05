@@ -36,15 +36,22 @@ public class Player : MonoBehaviour
     private bool isGrounded;
 
     [SerializeField] private GameObject pickUpText;
+    [SerializeField] private GameObject healText;
     [SerializeField] private float pickupDistance;
     [SerializeField] private LayerMask pickupableLayer;
 
     private bool isPickupableInWay;
     private RaycastHit hitInfo;
 
+    private bool isHoldingInteract;
+    private float interactTimer;
+    private float interactTimerMax = 3f;
+
     private void Awake()
     {
         Instance = this;
+
+        interactTimer = interactTimerMax;
     }
     private void Start()
     {
@@ -52,15 +59,30 @@ public class Player : MonoBehaviour
         GameInput.Instance.OnRunExit += GameInput_OnRunExit;
         GameInput.Instance.OnJump += GameInput_OnJump;
         GameInput.Instance.OnPickUp += GameInput_OnPickUp;
+        GameInput.Instance.OnInteractPerformed += GameInput_OnInteractPerformed;
+        GameInput.Instance.OnInteractCanceled += GameInput_OnInteractCanceled;
 
         pickUpText.SetActive(false);
+        healText.SetActive(false);
         isPickupableInWay = false;
     }
+
+    private void GameInput_OnInteractCanceled(object sender, EventArgs e)
+    {
+        isHoldingInteract = false;
+    }
+
+    private void GameInput_OnInteractPerformed(object sender, EventArgs e)
+    {
+        isHoldingInteract = true;
+    }
+
     private void GameInput_OnPickUp(object sender, System.EventArgs e)
     {
         if (isPickupableInWay)
         {
             pickUpText.SetActive(false);
+            healText.SetActive(false);
             hitInfo.transform.gameObject.SetActive(false);
 
             OnItemPickedUp?.Invoke(this, new OnItemPickedUpEventArgs
@@ -75,6 +97,20 @@ public class Player : MonoBehaviour
     {
         HandleMovement();
         HandlePickup();
+
+        if (isHoldingInteract && isPickupableInWay)
+        {
+            interactTimer -= Time.deltaTime;
+            if (interactTimer <= 0f)
+            {
+                interactTimer = interactTimerMax;
+                Debug.Log("Healed!");
+            }
+        }
+        if (!isHoldingInteract || !isPickupableInWay)
+        {
+            interactTimer = interactTimerMax;
+        }
     }
 
     private void GameInput_OnRun(object sender, System.EventArgs e)
@@ -133,11 +169,13 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(transform.position + new Vector3(0f, addHeight, 0f), transform.forward, out hitInfo, pickupDistance, pickupableLayer))
         {
             pickUpText.SetActive(true);
+            healText.SetActive(true);
             isPickupableInWay = true;
         }
         else
         {
             pickUpText.SetActive(false);
+            healText.SetActive(false);
             isPickupableInWay = false;
         }
     }

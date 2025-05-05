@@ -15,12 +15,13 @@ public class PlayerHealth : MonoBehaviour
     private float maxHealth = 200f;
     [SerializeField] private float health = 200f;
     [SerializeField] private float damage = 10f;
+
+    private bool isHoldingInteract;
     private void Start()
     {
         EnemyShooter.OnAnyPlayerHit += EnemyShooter_OnAnyPlayerHit;
     }
-
-    private void EnemyShooter_OnAnyPlayerHit(object sender, System.EventArgs e)
+    private void EnemyShooter_OnAnyPlayerHit(object sender, EventArgs e)
     {
         health -= damage;
         OnPlayerHealthChanged?.Invoke(this, new OnPlayerHealthChangedEventArgs

@@ -15,6 +15,8 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnPickUp;
     public event EventHandler OnInventoryOpenClose;
     public event EventHandler OnReload;
+    public event EventHandler OnInteractPerformed;
+    public event EventHandler OnInteractCanceled;
 
     private PlayerInputActions playerInputActions;
     private void Awake()
@@ -31,6 +33,18 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.PickUp.performed += PickUp_performed;
         playerInputActions.Player.Inventory.performed += Inventory_performed;
         playerInputActions.Gun.Reload.performed += Reload_performed;
+        playerInputActions.Player.Interact.performed += Interact_performed;
+        playerInputActions.Player.Interact.canceled += Interact_canceled;
+    }
+
+    private void Interact_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnInteractCanceled?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void Interact_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnInteractPerformed?.Invoke(this, EventArgs.Empty);
     }
 
     private void Reload_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
