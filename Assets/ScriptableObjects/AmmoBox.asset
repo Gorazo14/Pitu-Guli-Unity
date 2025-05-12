@@ -17,3 +17,6 @@ MonoBehaviour:
   maxStack: 1
   pickUpPrefab: {fileID: 4368927374785591397, guid: 3944309a1ac22bf4980d92f34b02dce0, type: 3}
   pickUpSprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  isMedkit: 0
+  bulletCount: 30
+  isAmmo: 1

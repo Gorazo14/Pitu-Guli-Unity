@@ -98,13 +98,14 @@ public class Player : MonoBehaviour
         HandleMovement();
         HandlePickup();
 
-        if (isHoldingInteract && isPickupableInWay)
+        if (isHoldingInteract && isPickupableInWay && GetComponent<PlayerHealth>().GetPlayerHealth() < GetComponent<PlayerHealth>().GetPlayerMaxHealth() && hitInfo.transform.GetComponent<PickUp>().GetPickUpSO().isMedkit)
         {
             interactTimer -= Time.deltaTime;
             if (interactTimer <= 0f)
             {
                 interactTimer = interactTimerMax;
-                Debug.Log("Healed!");
+                GetComponent<PlayerHealth>().SetPlayerHealth();
+                hitInfo.transform.gameObject.SetActive(false);
             }
         }
         if (!isHoldingInteract || !isPickupableInWay)
@@ -169,6 +170,7 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(transform.position + new Vector3(0f, addHeight, 0f), transform.forward, out hitInfo, pickupDistance, pickupableLayer))
         {
             pickUpText.SetActive(true);
+            if (hitInfo.transform.GetComponent<PickUp>().GetPickUpSO().isMedkit)
             healText.SetActive(true);
             isPickupableInWay = true;
         }

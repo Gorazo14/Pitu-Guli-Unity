@@ -23,10 +23,10 @@ public class Gun : MonoBehaviour
     [SerializeField] private Transform gunTip;
 
     [Header("BulletCounting")]
-    [SerializeField] private int magazineCapacity = 8;
-    [SerializeField] private int maxBullets = 50;
-    [SerializeField] private int magazineBullets = 8;
-    [SerializeField] private int fullBullets = 50;
+    [SerializeField] private int magazineCapacity = 1;
+    [SerializeField] private int maxBullets = 100;
+    [SerializeField] private int magazineBullets = 1;
+    [SerializeField] private int fullBullets = 0;
     [SerializeField] private float reloadTime = 1.5f;
     private int shotsFired = 0;
 
@@ -37,9 +37,43 @@ public class Gun : MonoBehaviour
     private void Start()
     {
         GameInput.Instance.OnReload += GameInput_OnReload;
+        Player.Instance.OnItemPickedUp += Player_OnItemPickedUp;
+
+        fullBullets = 0;
+        magazineBullets = 0;
+        OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
+        {
+            magazineBullets = 0,
+            fullBullets = 0
+        });
     }
 
-    
+    private void Player_OnItemPickedUp(object sender, Player.OnItemPickedUpEventArgs e)
+    {
+        if (e.pickUp.GetPickUpSO().isAmmo)
+        {
+            if (fullBullets < maxBullets)
+            {
+                fullBullets += e.pickUp.GetPickUpSO().bulletCount;
+
+                OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
+                {
+                    magazineBullets = magazineBullets,
+                    fullBullets = fullBullets
+                });
+            }
+            else
+            {
+                fullBullets = maxBullets;
+
+                OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
+                {
+                    magazineBullets = magazineBullets,
+                    fullBullets = fullBullets
+                });
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update() {
