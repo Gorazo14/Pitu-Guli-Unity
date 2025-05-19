@@ -44,7 +44,7 @@ public class InventoryUI : MonoBehaviour, IDropHandler
 
         itemTransform.anchoredPosition = slots[i].GetComponent<RectTransform>().anchoredPosition;
         itemTransform.GetComponent<Image>().sprite = item.GetPickUpSO().pickUpSprite;
-        itemTransform.GetComponent<Image>().color = Color.red;
+        itemTransform.GetComponent<Image>().color = Color.white;
         itemTransform.gameObject.SetActive(true);
         item.SetItemSlot(slots[i]);
         slots[i].SetItem(item);
