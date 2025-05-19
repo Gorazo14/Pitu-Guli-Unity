@@ -18,4 +18,4 @@ MonoBehaviour:
   pickUpPrefab: {fileID: 2405896404949231048, guid: 107a88bbc2b947741a28f5feec0aa1c2, type: 3}
   pickUpSprite: {fileID: 21300000, guid: c97ef850d1de7d8489f06491dab84ebe, type: 3}
   isMedkit: 1
-  bulletCount: 0
+  isAmmo: 0

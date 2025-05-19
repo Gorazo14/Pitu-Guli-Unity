@@ -1,15 +1,18 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
 public class Gun : MonoBehaviour
 {
+    public static Gun Instance { get; private set; }
+
     public static event EventHandler OnAnyShoot;
     public static event EventHandler<OnAnyBulletChangeEventArgs> OnAnyBulletChange;
     public class OnAnyBulletChangeEventArgs : EventArgs
     {
         public int magazineBullets;
-        public int fullBullets;
+        public int maxBullets;
     }
 
     [SerializeField] private Camera fpsCamera;
@@ -23,76 +26,78 @@ public class Gun : MonoBehaviour
     [SerializeField] private Transform gunTip;
 
     [Header("BulletCounting")]
-    [SerializeField] private int magazineCapacity = 1;
     [SerializeField] private int maxBullets = 100;
-    [SerializeField] private int magazineBullets = 1;
-    [SerializeField] private int fullBullets = 0;
-    [SerializeField] private float reloadTime = 1.5f;
-    private int shotsFired = 0;
-
+    private int bulletCount = 0;
+    [SerializeField] private int maxMagazineBullets = 1;
+    private int magazineBulletCount = 0;
+    [SerializeField] private float reloadTime = 2f;
+    private bool isReloading = false;
 
     private float nextTimeToFire = 0f;
-    private bool isAbleToShoot = true;
-
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
-        GameInput.Instance.OnReload += GameInput_OnReload;
         Player.Instance.OnItemPickedUp += Player_OnItemPickedUp;
+        GameInput.Instance.OnReload += GameInput_OnReload;
+    }
 
-        fullBullets = 0;
-        magazineBullets = 0;
-        OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
-        {
-            magazineBullets = 0,
-            fullBullets = 0
-        });
+    private void GameInput_OnReload(object sender, EventArgs e)
+    {
+        if (!isReloading && magazineBulletCount < maxMagazineBullets)
+        Invoke(nameof(Reload), reloadTime);
     }
 
     private void Player_OnItemPickedUp(object sender, Player.OnItemPickedUpEventArgs e)
     {
         if (e.pickUp.GetPickUpSO().isAmmo)
         {
-            if (fullBullets < maxBullets)
+            AmmoBox ammoBox = e.pickUp.GetComponent<AmmoBox>();
+            if (bulletCount + ammoBox.GetBulletCount() < maxBullets)
             {
-                fullBullets += e.pickUp.GetPickUpSO().bulletCount;
+                bulletCount += ammoBox.GetBulletCount();
+                bulletCount -= maxMagazineBullets - magazineBulletCount;
+                magazineBulletCount = maxMagazineBullets;
 
                 OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
                 {
-                    magazineBullets = magazineBullets,
-                    fullBullets = fullBullets
+                    maxBullets = bulletCount,
+                    magazineBullets = magazineBulletCount
                 });
-            }
-            else
+            }else
             {
-                fullBullets = maxBullets;
+                bulletCount = maxBullets;
+                bulletCount -= maxMagazineBullets - magazineBulletCount;
+                magazineBulletCount = maxMagazineBullets;
+
 
                 OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
                 {
-                    magazineBullets = magazineBullets,
-                    fullBullets = fullBullets
+                    maxBullets = bulletCount,
+                    magazineBullets = magazineBulletCount
                 });
             }
         }
     }
 
-    // Update is called once per frame
-    void Update() {
-        
+    private void Update()
+    {
         if (player.enabled == false)
         {
             return;
         }
-        if (Input.GetMouseButtonDown(0) && Time.time >= nextTimeToFire )
+        if (Input.GetMouseButtonDown(0) && Time.time >= nextTimeToFire)
         {
-            nextTimeToFire = Time.time +1f / fireRate;   
+            nextTimeToFire = Time.time + 1f / fireRate;
             Shoot();
         }
-                
-   }
+    }
 
-    void Shoot()
+    private void Shoot()
     {
-        if (!isAbleToShoot || magazineBullets <= 0) return;
+        if (magazineBulletCount <= 0 || isReloading) return;
         RaycastHit hit;
         if (Physics.Raycast(fpsCamera.transform.position, fpsCamera.transform.forward, out hit, range))
         {
@@ -104,55 +109,58 @@ public class Gun : MonoBehaviour
                 target.TakeDamage(damage);
             }
         }
-        magazineBullets--;
-        shotsFired++;
-        if (magazineBullets <= 0)
-        {
-            isAbleToShoot = false;
-            Invoke(nameof(Reload), reloadTime);
-        }
-
         Transform shootParticleEffectTransform = Instantiate(shootParticleEffect, gunTip.position, gunTip.rotation);
         OnAnyShoot?.Invoke(this, EventArgs.Empty);
+
+        magazineBulletCount--;
         OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
         {
-            magazineBullets = magazineBullets,
-            fullBullets = fullBullets
+            maxBullets = bulletCount,
+            magazineBullets = magazineBulletCount
         });
-    }
-    private void GameInput_OnReload(object sender, EventArgs e)
-    {
-        if (isAbleToShoot && magazineBullets < magazineCapacity)
+        if (magazineBulletCount <= 0)
         {
-            isAbleToShoot = false;
+            isReloading = true;
             Invoke(nameof(Reload), reloadTime);
-        } 
+        }
     }
+
     private void Reload()
     {
-        if (fullBullets >= magazineCapacity)
+        if (bulletCount >= maxMagazineBullets - magazineBulletCount)
         {
-            magazineBullets = magazineCapacity;
+            bulletCount -= maxMagazineBullets - magazineBulletCount;
+            magazineBulletCount = maxMagazineBullets;
+
+            OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
+            {
+                maxBullets = bulletCount,
+                magazineBullets = magazineBulletCount
+            });
         }
         else
         {
-            magazineBullets = fullBullets;
+            magazineBulletCount = bulletCount;
+            bulletCount = 0;
+
+            OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
+            {
+                maxBullets = bulletCount,
+                magazineBullets = magazineBulletCount
+            });
         }
-        fullBullets -= shotsFired;
-        shotsFired = 0;
-        if (fullBullets <= 0)
-        {
-            fullBullets = 0;
-        }
-        OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
-        {
-            magazineBullets = magazineBullets,
-            fullBullets = fullBullets
-        });
-        isAbleToShoot = true;
+        isReloading = false;
     }
     public Transform GetGunTip()
     {
         return gunTip;
+    }
+    public int GetBulletCount()
+    {
+        return bulletCount;
+    }
+    public int GetMaxBullets()
+    {
+        return maxBullets;
     }
 }

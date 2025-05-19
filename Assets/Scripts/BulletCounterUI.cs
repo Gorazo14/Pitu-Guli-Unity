@@ -13,6 +13,6 @@ public class BulletCounterUI : MonoBehaviour
 
     private void Gun_OnAnyBulletChange(object sender, Gun.OnAnyBulletChangeEventArgs e)
     {
-        bulletCounterText.text = e.magazineBullets + "/" + e.fullBullets;
+        bulletCounterText.text = e.magazineBullets + "/" + e.maxBullets;
     }
 }

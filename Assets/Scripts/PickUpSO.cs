@@ -11,6 +11,5 @@ public class PickUpSO : ScriptableObject
     public Transform pickUpPrefab;
     public Sprite pickUpSprite;
     public bool isMedkit;
-    public int bulletCount;
     public bool isAmmo;
 }

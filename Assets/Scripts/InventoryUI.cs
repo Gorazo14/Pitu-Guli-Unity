@@ -27,6 +27,7 @@ public class InventoryUI : MonoBehaviour, IDropHandler
 
     private void Player_OnItemPickedUp(object sender, Player.OnItemPickedUpEventArgs e)
     {
+        if (e.pickUp.GetPickUpSO().isAmmo) return;
         for (int i=0; i < slots.Length; i++)
         {
             if (!slots[i].HasItem() || (slots[i].HasItem() && slots[i].GetItem().GetPickUpSO().isStackable && slots[i].GetItemsOnSlotCount() < e.pickUp.GetPickUpSO().maxStack))

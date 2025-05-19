@@ -83,8 +83,7 @@ public class Player : MonoBehaviour
         {
             pickUpText.SetActive(false);
             healText.SetActive(false);
-            hitInfo.transform.gameObject.SetActive(false);
-
+            Destroy(hitInfo.transform.gameObject);
             OnItemPickedUp?.Invoke(this, new OnItemPickedUpEventArgs
             {
                 pickUp = hitInfo.transform.gameObject.GetComponent<PickUp>()
@@ -105,7 +104,7 @@ public class Player : MonoBehaviour
             {
                 interactTimer = interactTimerMax;
                 GetComponent<PlayerHealth>().SetPlayerHealth();
-                hitInfo.transform.gameObject.SetActive(false);
+                Destroy(hitInfo.transform.gameObject);
             }
         }
         if (!isHoldingInteract || !isPickupableInWay)
@@ -128,7 +127,7 @@ public class Player : MonoBehaviour
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             isJumping = true;
-            Invoke("SetIsJumpingFalse", 1f);
+            Invoke(nameof(SetIsJumpingFalse), 1f);
         }
     }
     private void SetIsJumpingFalse()
@@ -166,6 +165,8 @@ public class Player : MonoBehaviour
     }
     private void HandlePickup()
     {
+        if (Gun.Instance.GetBulletCount() >= Gun.Instance.GetMaxBullets()) return;
+
         float addHeight = 0.2f;
         if (Physics.Raycast(transform.position + new Vector3(0f, addHeight, 0f), transform.forward, out hitInfo, pickupDistance, pickupableLayer))
         {
