@@ -42,6 +42,16 @@ public class Gun : MonoBehaviour
     {
         Player.Instance.OnItemPickedUp += Player_OnItemPickedUp;
         GameInput.Instance.OnReload += GameInput_OnReload;
+        GameInput.Instance.OnShoot += GameInput_OnShoot;
+    }
+
+    private void GameInput_OnShoot(object sender, EventArgs e)
+    {
+        if (Time.time >= nextTimeToFire)
+        {
+            nextTimeToFire = Time.time + 1f / fireRate;
+            Shoot();
+        }
     }
 
     private void GameInput_OnReload(object sender, EventArgs e)
@@ -61,38 +71,22 @@ public class Gun : MonoBehaviour
                 bulletCount -= maxMagazineBullets - magazineBulletCount;
                 magazineBulletCount = maxMagazineBullets;
 
-                OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
-                {
-                    maxBullets = bulletCount,
-                    magazineBullets = magazineBulletCount
-                });
-            }else
+                BulletChangeEvent(bulletCount, magazineBulletCount);
+            }
+            else
             {
                 bulletCount = maxBullets;
                 bulletCount -= maxMagazineBullets - magazineBulletCount;
                 magazineBulletCount = maxMagazineBullets;
 
-
-                OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
-                {
-                    maxBullets = bulletCount,
-                    magazineBullets = magazineBulletCount
-                });
+                BulletChangeEvent(bulletCount, magazineBulletCount);
             }
         }
     }
 
     private void Update()
     {
-        if (player.enabled == false)
-        {
-            return;
-        }
-        if (Input.GetMouseButtonDown(0) && Time.time >= nextTimeToFire)
-        {
-            nextTimeToFire = Time.time + 1f / fireRate;
-            Shoot();
-        }
+        if (player.enabled == false) return;
     }
 
     private void Shoot()
@@ -113,11 +107,7 @@ public class Gun : MonoBehaviour
         OnAnyShoot?.Invoke(this, EventArgs.Empty);
 
         magazineBulletCount--;
-        OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
-        {
-            maxBullets = bulletCount,
-            magazineBullets = magazineBulletCount
-        });
+        BulletChangeEvent(bulletCount, magazineBulletCount);
         if (magazineBulletCount <= 0)
         {
             isReloading = true;
@@ -132,24 +122,25 @@ public class Gun : MonoBehaviour
             bulletCount -= maxMagazineBullets - magazineBulletCount;
             magazineBulletCount = maxMagazineBullets;
 
-            OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
-            {
-                maxBullets = bulletCount,
-                magazineBullets = magazineBulletCount
-            });
+            BulletChangeEvent(bulletCount, magazineBulletCount);
         }
         else
         {
             magazineBulletCount = bulletCount;
             bulletCount = 0;
 
-            OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
-            {
-                maxBullets = bulletCount,
-                magazineBullets = magazineBulletCount
-            });
+            BulletChangeEvent(bulletCount, magazineBulletCount);
         }
         isReloading = false;
+    }
+
+    private void BulletChangeEvent(int maxBullets, int magazineBullets)
+    {
+        OnAnyBulletChange?.Invoke(this, new OnAnyBulletChangeEventArgs
+        {
+            maxBullets = maxBullets,
+            magazineBullets = magazineBullets
+        });
     }
     public Transform GetGunTip()
     {

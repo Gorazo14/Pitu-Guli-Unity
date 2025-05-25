@@ -7,6 +7,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     public event EventHandler<OnPlayerHealthChangedEventArgs> OnPlayerHealthChanged;
+    public event EventHandler OnPlayerDeath;
     public class OnPlayerHealthChangedEventArgs : EventArgs
     {
         public float healthNormalized;
@@ -29,7 +30,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (health <= 0f)
         {
-            Debug.Log("GameOver!");
+            OnPlayerDeath?.Invoke(this, EventArgs.Empty);
         }
     }
     public float GetPlayerHealth()

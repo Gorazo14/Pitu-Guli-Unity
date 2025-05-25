@@ -79,7 +79,7 @@ public class Player : MonoBehaviour
 
     private void GameInput_OnPickUp(object sender, System.EventArgs e)
     {
-        if (isPickupableInWay)
+        if (isPickupableInWay && InventoryUI.Instance.IsSpaceLeft())
         {
             pickUpText.SetActive(false);
             healText.SetActive(false);

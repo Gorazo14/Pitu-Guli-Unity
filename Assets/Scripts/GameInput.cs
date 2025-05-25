@@ -17,6 +17,7 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnReload;
     public event EventHandler OnInteractPerformed;
     public event EventHandler OnInteractCanceled;
+    public event EventHandler OnShoot;
 
     private PlayerInputActions playerInputActions;
     private void Awake()
@@ -35,6 +36,12 @@ public class GameInput : MonoBehaviour
         playerInputActions.Gun.Reload.performed += Reload_performed;
         playerInputActions.Player.Interact.performed += Interact_performed;
         playerInputActions.Player.Interact.canceled += Interact_canceled;
+        playerInputActions.Gun.Shoot.performed += Shoot_performed;
+    }
+
+    private void Shoot_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnShoot?.Invoke(this, EventArgs.Empty);
     }
 
     private void Interact_canceled(UnityEngine.InputSystem.InputAction.CallbackContext obj)
