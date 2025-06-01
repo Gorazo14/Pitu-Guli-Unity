@@ -10,6 +10,12 @@ namespace GDL
         public static event EventHandler OnAnyPlayerHit;
         public static event EventHandler OnAnyEnemyShoot;
 
+        public static void ResetStaticData()
+        {
+            OnAnyPlayerHit = null;
+            OnAnyEnemyShoot = null;
+        }
+
         [Header("General")]
         public Transform shootPoint;
         public LayerMask layerMask;
@@ -78,7 +84,6 @@ namespace GDL
                 // Increment shot counter
                 currentShotCount++;
                 nextTimeToFire = Time.time + 1f / fireRate;
-                Debug.Log("Shoot");
                 OnAnyEnemyShoot?.Invoke(this, EventArgs.Empty);
                 Instantiate(muzzleFlashEffect, shootPoint.position, shootPoint.rotation);
             }
@@ -93,8 +98,6 @@ namespace GDL
         {
             // Set reloading state
             isReloading = true;
-
-            Debug.Log("Enemy is reloading...");
 
             // Wait for reload time
             yield return new WaitForSeconds(reloadTime);

@@ -125,7 +125,6 @@ namespace GDL
 
             if (Time.time >= pathUpdateDeadline)
             {
-                Debug.Log("Updating Path");
                 pathUpdateDeadline = Time.time + enemyReferences.pathUpdatedelay;
                 enemyReferences.navMeshagent.SetDestination(target.position);
             }

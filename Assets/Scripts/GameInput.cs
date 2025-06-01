@@ -8,6 +8,8 @@ public class GameInput : MonoBehaviour
 {
     public static GameInput Instance { get; private set; }
 
+    private PlayerInputActions playerInputActions;
+
     public event EventHandler OnJump;
     public event EventHandler OnRun;
     public event EventHandler OnRunExit;
@@ -18,8 +20,7 @@ public class GameInput : MonoBehaviour
     public event EventHandler OnInteractPerformed;
     public event EventHandler OnInteractCanceled;
     public event EventHandler OnShoot;
-
-    private PlayerInputActions playerInputActions;
+    public event EventHandler OnPause;
     private void Awake()
     {
         Instance = this;
@@ -37,6 +38,27 @@ public class GameInput : MonoBehaviour
         playerInputActions.Player.Interact.performed += Interact_performed;
         playerInputActions.Player.Interact.canceled += Interact_canceled;
         playerInputActions.Gun.Shoot.performed += Shoot_performed;
+        playerInputActions.Player.Pause.performed += Pause_performed;
+    }
+    private void OnDestroy()
+    {
+        playerInputActions.Dispose();
+
+        playerInputActions.Player.Jump.performed -= Jump_performed;
+        playerInputActions.Player.Run.performed -= Run_performed;
+        playerInputActions.Player.Run.canceled -= Run_canceled;
+        playerInputActions.Gun.EquipGun.performed -= EquipGun_performed;
+        playerInputActions.Player.PickUp.performed -= PickUp_performed;
+        playerInputActions.Player.Inventory.performed -= Inventory_performed;
+        playerInputActions.Gun.Reload.performed -= Reload_performed;
+        playerInputActions.Player.Interact.performed -= Interact_performed;
+        playerInputActions.Player.Interact.canceled -= Interact_canceled;
+        playerInputActions.Gun.Shoot.performed -= Shoot_performed;
+        playerInputActions.Player.Pause.performed -= Pause_performed;
+    }
+    private void Pause_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)
+    {
+        OnPause?.Invoke(this, EventArgs.Empty);
     }
 
     private void Shoot_performed(UnityEngine.InputSystem.InputAction.CallbackContext obj)

@@ -23,7 +23,8 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] private List<GameObject> enemies;
     [SerializeField] private List<Transform> spawnPoints;
-    [SerializeField] private GameObject medkitPrefab;
+    [SerializeField] private Transform medkitPrefab;
+    [SerializeField] private Transform playerTransform;
 
     private State state;
 
@@ -45,6 +46,7 @@ public class BattleSystem : MonoBehaviour
 
         enemies = new List<GameObject>();
         waveTimer = waveTimerMax;
+        playerTransform.position = GetRandomPositionOnTerrain();
     }
     private void Start()
     {
