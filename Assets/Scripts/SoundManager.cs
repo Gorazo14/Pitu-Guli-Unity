@@ -5,7 +5,13 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
+    public static SoundManager Instance { get; private set; }
     [SerializeField] private SoundEffectsSO soundEffectSO;
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         Gun.OnAnyShoot += Gun_OnAnyShoot;
@@ -31,5 +37,9 @@ public class SoundManager : MonoBehaviour
     private void PlaySound(AudioClip clip, Vector3 position, float volume=1f)
     {
         AudioSource.PlayClipAtPoint(clip, position, volume);    
+    }
+    public void PlayFootstepSound(Vector3 position, float volume=1f)
+    {
+        AudioSource.PlayClipAtPoint(soundEffectSO.footstep, position, volume);
     }
 }

@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: SoundEffects
   m_EditorClassIdentifier: 
   rifleShot: {fileID: 8300000, guid: e0c9204858fd9494d991e8fbd3c79f96, type: 3}
+  footstep: {fileID: 8300000, guid: cf7c6b0bda028864596f703df6166dd6, type: 3}

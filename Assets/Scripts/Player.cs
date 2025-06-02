@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
     private float interactTimer;
     private float interactTimerMax = 3f;
 
+    private Vector3 moveDir;
     private void Awake()
     {
         Instance = this;
@@ -139,7 +140,7 @@ public class Player : MonoBehaviour
         x = Input.GetAxis("Horizontal");
         z = Input.GetAxis("Vertical");
 
-        Vector3 moveDir = transform.right * x + transform.forward * z;
+        moveDir = transform.right * x + transform.forward * z;
 
         if (isRunning)
         {
@@ -181,6 +182,10 @@ public class Player : MonoBehaviour
             healText.SetActive(false);
             isPickupableInWay = false;
         }
+    }
+    public bool IsPlayerMoving()
+    {
+        return moveDir.magnitude > 0; 
     }
 
 }

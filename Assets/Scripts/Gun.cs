@@ -43,6 +43,9 @@ public class Gun : MonoBehaviour
         Player.Instance.OnItemPickedUp += Player_OnItemPickedUp;
         GameInput.Instance.OnReload += GameInput_OnReload;
         GameInput.Instance.OnShoot += GameInput_OnShoot;
+
+        bulletCount = 30;
+        BulletChangeEvent(bulletCount, magazineBulletCount);
     }
 
     private void GameInput_OnShoot(object sender, EventArgs e)

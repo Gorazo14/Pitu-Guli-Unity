@@ -6,4 +6,5 @@ using UnityEngine;
 public class SoundEffectsSO : ScriptableObject
 {
     public AudioClip rifleShot;
+    public AudioClip footstep;
 }
