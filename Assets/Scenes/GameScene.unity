@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1307,6 +1307,7 @@ MonoBehaviour:
   - {fileID: 2078448618}
   - {fileID: 740561257}
   medkitPrefab: {fileID: 2405896404949231048, guid: 107a88bbc2b947741a28f5feec0aa1c2, type: 3}
+  ammoBoxPrefab: {fileID: 4368927374785591397, guid: 3944309a1ac22bf4980d92f34b02dce0, type: 3}
   playerTransform: {fileID: 741768002}
   enemiesToAdd: 3
   timeBetweenWavesIncrement: 10
@@ -4078,6 +4079,10 @@ PrefabInstance:
       propertyPath: pickUpText
       value: 
       objectReference: {fileID: 46778172}
+    - target: {fileID: 5728181507245040395, guid: c1b2f400674661949a1a1c094f9b9549, type: 3}
+      propertyPath: mouseSensitivity
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 6694405375355841042, guid: c1b2f400674661949a1a1c094f9b9549, type: 3}
       propertyPath: m_LocalPosition.x
       value: 230
@@ -5022,9 +5027,9 @@ RectTransform:
   - {fileID: 2052978663}
   m_Father: {fileID: 534050996}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1796, y: -116}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 189, y: -116}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1909784549
@@ -5488,10 +5493,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1021029056}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1920, y: 1080}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2014464765
 MonoBehaviour:

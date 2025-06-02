@@ -24,6 +24,7 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] private List<GameObject> enemies;
     [SerializeField] private List<Transform> spawnPoints;
     [SerializeField] private Transform medkitPrefab;
+    [SerializeField] private Transform ammoBoxPrefab;
     [SerializeField] private Transform playerTransform;
 
     private State state;
@@ -59,7 +60,10 @@ public class BattleSystem : MonoBehaviour
 
     private void Target_OnAnyEnemyDeath(object sender, EventArgs e)
     {
+        Target target = sender as Target;
+
         killCount++;
+        Instantiate(ammoBoxPrefab, target.transform.position, Quaternion.identity);
         enemies.RemoveAt(0);
         if (enemies.Count <= 0)
         {
